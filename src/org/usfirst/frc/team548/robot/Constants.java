@@ -18,7 +18,7 @@ public class Constants {
 	public static final int ING_TALONID_ROLLERMOTOR = 0;
 	public static final int ING_SOLENOID_GEARSOL = 0;
 	public static final int ING_SOLENOID_LEFTROLLERSOL = 0;
-	public static final int ING_SOlENOID_RIGHTROLLERSOL = 0;
+	public static final int ING_SOLENOID_RIGHTROLLERSOL = 0;
 	//Shooter
 	public static final int SHOOT_TALONID_TALONRIGHT= 0;
 	public static final int SHOOT_TALONID_TALONLEFT= 0;
