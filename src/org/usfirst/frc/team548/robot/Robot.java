@@ -13,7 +13,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
+	DriveTrain.getInstance();
+	TeleOperated.getInstance();
 	}
 
 	
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		TeleOperated.run();
 	}
 
 	/**

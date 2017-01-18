@@ -36,4 +36,31 @@ private static DriveTrain instance;
 		leftMini.set(-leftPower);
 	}
 	
+	public static void stop() {
+		drive(0,0);
+	}
+	
+	public static void arcadeDrice(double fwd, double tur) {
+		if(Math.abs(tur) < .01) tur = 0;
+		if(Math.abs(fwd) < .2) fwd = 0;
+		drive(Util.ensureRange(fwd+tur, -1d, 1d), Util.ensureRange(fwd-tur, -1d, 1d));
+	}
+	
+	public static void shift(boolean b) {
+		rightShifter.set(b);
+		leftShifter.set(b);
+	}
+	
+	public static void shiftToHigh() {
+		shift(Constants.DT_SHIFT_HIGH);
+	}
+	
+	public static void shiftLow() {
+		shift(!Constants.DT_SHIFT_HIGH);
+	}
+	
+	public static boolean isHigh() {
+		return rightShifter.get() == Constants.DT_SHIFT_HIGH;
+	}
+	
 }

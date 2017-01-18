@@ -10,6 +10,7 @@ public class Constants {
 	public static final int DT_TALONID_LEFTMINI = 0;
 	public static final int DT_SOLENOID_RIGHTSHIFTER = 0;
 	public static final int DT_SOLENOID_LEFTSHIFTER = 0;
+	public static final boolean DT_SHIFT_HIGH = true;
 	//Climber
 	public static final int CLIMB_TALONID_CLIMBTALON = 0;
 	//Ingestor
