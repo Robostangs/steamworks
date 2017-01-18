@@ -10,7 +10,7 @@ public class Climber {
 		return instance;
 	}
 	
-	CANTalon climbTalon;
+	private static CANTalon climbTalon;
 	
 	private Climber() {
 		climbTalon = new CANTalon(Constants.CLIMB_TALONID_CLIMBTALON);

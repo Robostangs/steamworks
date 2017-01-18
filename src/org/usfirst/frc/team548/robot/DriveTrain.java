@@ -12,8 +12,8 @@ private static DriveTrain instance;
 		return instance;
 	}
 	
-	CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
-	Solenoid rightShifter, leftShifter;
+	private static CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
+	private static Solenoid rightShifter, leftShifter;
 	
 	
 	private DriveTrain() {
@@ -25,6 +25,15 @@ private static DriveTrain instance;
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
 		rightShifter = new Solenoid(Constants.DT_SOLENOID_RIGHTSHIFTER);
 		leftShifter = new Solenoid(Constants.DT_SOLENOID_LEFTSHIFTER);
+	}
+	
+	public static void drive(double leftPower, double rightPower){
+		rightFront.set(rightPower);
+		rightBack.set(rightPower);
+		rightMini.set(rightPower);
+		leftFront.set(-leftPower);
+		leftBack.set(-leftPower);
+		leftMini.set(-leftPower);
 	}
 	
 }

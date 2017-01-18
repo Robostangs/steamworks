@@ -11,7 +11,7 @@ private static Shooter instance;
 		return instance;
 	}
 	
-	CANTalon talonLeft, talonRight;
+	private static CANTalon talonLeft, talonRight;
 	
 	
 	private Shooter() {
