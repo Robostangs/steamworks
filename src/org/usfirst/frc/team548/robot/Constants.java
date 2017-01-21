@@ -1,6 +1,8 @@
 package org.usfirst.frc.team548.robot;
 
 public class Constants {
+	//Xbox
+	public static final int XB_POS_DRIVER = 0;
 	//DriveTrain
 	public static final int DT_TALONID_RIGHTFRONT = 0;
 	public static final int DT_TALONID_RIGHTBACK = 0;

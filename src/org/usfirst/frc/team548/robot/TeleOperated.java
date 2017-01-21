@@ -9,8 +9,10 @@ private static TeleOperated instance;
 		return instance;
 	}
 	
+	public static XBoxController driver;
+	
 	private TeleOperated(){
-		
+		driver = new XBoxController(Constants.XB_POS_DRIVER);
 	}
 	
 	public static void run(){
