@@ -4,12 +4,12 @@ public class Constants {
 	//Xbox
 	public static final int XB_POS_DRIVER = 0;
 	//DriveTrain
-	public static final int DT_TALONID_RIGHTFRONT = 0;
-	public static final int DT_TALONID_RIGHTBACK = 0;
-	public static final int DT_TALONID_RIGHTMINI = 0;
-	public static final int DT_TALONID_LEFTFRONT = 0;
-	public static final int DT_TALONID_LEFTBACK = 0;
-	public static final int DT_TALONID_LEFTMINI = 0;
+	public static final int DT_TALONID_RIGHTFRONT = 5;
+	public static final int DT_TALONID_RIGHTBACK = 4;
+	public static final int DT_TALONID_RIGHTMINI = 6;
+	public static final int DT_TALONID_LEFTFRONT = 9;
+	public static final int DT_TALONID_LEFTBACK = 8;
+	public static final int DT_TALONID_LEFTMINI = 7;
 	public static final int DT_SOLENOID_RIGHTSHIFTER = 0;
 	public static final int DT_SOLENOID_LEFTSHIFTER = 0;
 	public static final boolean DT_SHIFT_HIGH = true;

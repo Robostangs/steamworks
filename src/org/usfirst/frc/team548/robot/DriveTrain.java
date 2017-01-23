@@ -13,7 +13,7 @@ private static DriveTrain instance;
 	}
 	
 	private static CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
-	private static Solenoid rightShifter, leftShifter;
+	private static Solenoid shifter;
 	
 	
 	private DriveTrain() {
@@ -23,17 +23,16 @@ private static DriveTrain instance;
 		leftFront = new CANTalon(Constants.DT_TALONID_LEFTFRONT);
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
-		rightShifter = new Solenoid(Constants.DT_SOLENOID_RIGHTSHIFTER);
-		leftShifter = new Solenoid(Constants.DT_SOLENOID_LEFTSHIFTER);
+		//shifter = new Solenoid(Constants.DT_SOLENOID_LEFTSHIFTER);
 	}
 	
 	public static void drive(double leftPower, double rightPower){
-		rightFront.set(rightPower);
-		rightBack.set(rightPower);
-		rightMini.set(rightPower);
-		leftFront.set(-leftPower);
-		leftBack.set(-leftPower);
-		leftMini.set(-leftPower);
+		rightFront.set(-rightPower);
+		rightBack.set(-rightPower);
+		rightMini.set(-rightPower);
+		leftFront.set(leftPower);
+		leftBack.set(leftPower);
+		leftMini.set(leftPower);
 	}
 	
 	public static void stop() {
@@ -43,12 +42,11 @@ private static DriveTrain instance;
 	public static void arcadeDrice(double fwd, double tur) {
 		if(Math.abs(tur) < .01) tur = 0;
 		if(Math.abs(fwd) < .2) fwd = 0;
-		drive(Util.ensureRange(fwd+tur, -1d, 1d), Util.ensureRange(fwd-tur, -1d, 1d));
+		drive(Utils.ensureRange(fwd+tur, -1d, 1d), Utils.ensureRange(fwd-tur, -1d, 1d));
 	}
 	
 	public static void shift(boolean b) {
-		rightShifter.set(b);
-		leftShifter.set(b);
+		shifter.set(b);
 	}
 	
 	public static void shiftToHigh() {
@@ -60,7 +58,7 @@ private static DriveTrain instance;
 	}
 	
 	public static boolean isHigh() {
-		return rightShifter.get() == Constants.DT_SHIFT_HIGH;
+		return shifter.get() == Constants.DT_SHIFT_HIGH;
 	}
 	
 }

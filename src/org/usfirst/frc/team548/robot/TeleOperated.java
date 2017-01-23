@@ -16,6 +16,6 @@ private static TeleOperated instance;
 	}
 	
 	public static void run(){
-		
+		DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
 	}
 }
