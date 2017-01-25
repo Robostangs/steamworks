@@ -23,7 +23,7 @@ private static DriveTrain instance;
 		leftFront = new CANTalon(Constants.DT_TALONID_LEFTFRONT);
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
-		//shifter = new Solenoid(Constants.DT_SOLENOID_LEFTSHIFTER);
+		shifter = new Solenoid(Constants.DT_SOLENOID_SHIFTER);
 	}
 	
 	public static void drive(double leftPower, double rightPower){
