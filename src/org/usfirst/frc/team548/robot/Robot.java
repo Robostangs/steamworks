@@ -1,5 +1,7 @@
 package org.usfirst.frc.team548.robot;
 
+import org.usfirst.frc.team548.robot.AutoModes.TestAuto;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +22,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		
+		new TestAuto().start();
 	}
 
 	/**
@@ -44,6 +46,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		System.out.println(DriveTrain.getAngle());
+		DriveTrain.breakMode(true);
+		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
+		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
 	}
 }
 

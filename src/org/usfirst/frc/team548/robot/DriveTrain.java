@@ -2,31 +2,44 @@ package org.usfirst.frc.team548.robot;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-public class DriveTrain {
-private static DriveTrain instance;
-	
+public class DriveTrain implements PIDOutput{
+	private static DriveTrain instance;
+
 	public static DriveTrain getInstance() {
-		if(instance == null) instance = new DriveTrain();
+		if (instance == null)
+			instance = new DriveTrain();
 		return instance;
 	}
-	
+
 	private static CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
 	private static Solenoid shifter;
-	
-	
+	private static ADIS16448_IMU hyro;
+	private static AnalogInput pressure;
+	private static PIDController pid;
+
 	private DriveTrain() {
 		rightFront = new CANTalon(Constants.DT_TALONID_RIGHTFRONT);
 		rightBack = new CANTalon(Constants.DT_TALONID_RIGHTBACK);
-		rightMini= new CANTalon(Constants.DT_TALONID_RIGHTMINI);
+		rightMini = new CANTalon(Constants.DT_TALONID_RIGHTMINI);
 		leftFront = new CANTalon(Constants.DT_TALONID_LEFTFRONT);
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
 		shifter = new Solenoid(Constants.DT_SOLENOID_SHIFTER);
+		hyro = new ADIS16448_IMU();
+		pressure = new AnalogInput(0);
+		pid = new PIDController(0.01d, 0, 0, hyro, this);
+		LiveWindow.addActuator("Turning", "pid", pid);
+		pid.setOutputRange(-.5, 0.5);
+		
 	}
-	
-	public static void drive(double leftPower, double rightPower){
+
+	public static void drive(double leftPower, double rightPower) {
 		rightFront.set(-rightPower);
 		rightBack.set(-rightPower);
 		rightMini.set(-rightPower);
@@ -34,31 +47,73 @@ private static DriveTrain instance;
 		leftBack.set(leftPower);
 		leftMini.set(leftPower);
 	}
-	
+
 	public static void stop() {
-		drive(0,0);
+		drive(0, 0);
 	}
-	
+
 	public static void arcadeDrice(double fwd, double tur) {
-		if(Math.abs(tur) < .01) tur = 0;
-		if(Math.abs(fwd) < .2) fwd = 0;
-		drive(Utils.ensureRange(fwd+tur, -1d, 1d), Utils.ensureRange(fwd-tur, -1d, 1d));
+		if (Math.abs(tur) < .01)
+			tur = 0;
+		if (Math.abs(fwd) < .2)
+			fwd = 0;
+		drive(Utils.ensureRange(fwd + tur, -1d, 1d), Utils.ensureRange(fwd - tur, -1d, 1d));
 	}
-	
-	public static void shift(boolean b) {
-		shifter.set(b);
+
+	public static void shiftHigh(boolean b) {
+		shifter.set(b == Constants.DT_SHIFT_HIGH);
 	}
-	
-	public static void shiftToHigh() {
-		shift(Constants.DT_SHIFT_HIGH);
-	}
-	
-	public static void shiftLow() {
-		shift(!Constants.DT_SHIFT_HIGH);
-	}
-	
+
 	public static boolean isHigh() {
 		return shifter.get() == Constants.DT_SHIFT_HIGH;
 	}
+
+	public static double getAngle() {
+		return hyro.getAngleZ();
+	}
+
+	public static void restHyro() {
+		hyro.reset();
+	}
+
+	public static void calibrateHyro() {
+		hyro.calibrate();
+	}
+
+	public static double getPressure() {
+		return (250d * (pressure.getVoltage() / 5d)) - 25d;
+	}
 	
+	public static void breakMode(boolean b) {
+		rightFront.enableBrakeMode(b);
+		rightBack.enableBrakeMode(b);
+		rightMini.enableBrakeMode(b);
+		leftFront.enableBrakeMode(b);
+		leftBack.enableBrakeMode(b);
+		leftMini.enableBrakeMode(b);
+	}
+
+	public void pidWrite(double output) {
+		//. 0.006 P
+//		if (Math.abs(pid.getError()) < 15d) {
+//			pid.setPID(pid.getP(), .0001, 0);
+//		} else {
+//			// I Zone
+//			pid.setPID(pid.getP(), 0, 0);
+//
+//		}
+		drive(output, -output);
+	}
+	
+	public static void disablePID() {
+		pid.reset();
+	}
+	
+	public static void turnToAngle(double angle) {
+		pid.setSetpoint(angle);
+		if(pid.isEnabled()) {
+			pid.reset();
+			pid.enable();
+		}
+	}
 }
