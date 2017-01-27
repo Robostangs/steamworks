@@ -11,9 +11,10 @@ public class TestAuto extends AutoMode {
 	@Override
 	protected void run() {
 		// TODO Auto-generated method stub
-		turnToAngleInTime(5, 45, true);
-		waitTime(5);
-		turnToAngleInTime(5, 0, false);
+		turnToAngleInTime(2.5, 90, true);
+		driveInTime(2, .5);
+		turnToAngleInTime(2.5, 0, false);
+		driveInTime(2, .5);
 	}
 
 	

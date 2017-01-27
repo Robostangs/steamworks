@@ -14,7 +14,7 @@ public class Constants {
 	public static final boolean DT_SHIFT_HIGH = true;
 	
 	//Climber
-	public static final int CLIMB_TALONID_CLIMBTALON = 0;
+	public static final int CLIMB_TALONID_CLIMBTALON = 12;
 	//Ingestor
 	public static final int ING_TALONID_BOXRIGHT = 0;
 	public static final int ING_TALONID_BOXLEFT = 0;

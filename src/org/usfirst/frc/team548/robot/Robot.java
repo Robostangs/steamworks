@@ -1,10 +1,8 @@
 package org.usfirst.frc.team548.robot;
 
-import org.usfirst.frc.team548.robot.AutoModes.TestAuto;
+import org.usfirst.frc.team548.robot.AutoModes.*;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
@@ -15,8 +13,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-	DriveTrain.getInstance();
-	TeleOperated.getInstance();
+		DriveTrain.getInstance();
+		Climber.getInstance();
+		TeleOperated.getInstance();
 	}
 
 	

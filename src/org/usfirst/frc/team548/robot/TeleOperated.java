@@ -22,5 +22,10 @@ private static TeleOperated instance;
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
+		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
+		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());
+		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
+		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
+		Climber.setPower(driver.getTriggers());
 	}
 }

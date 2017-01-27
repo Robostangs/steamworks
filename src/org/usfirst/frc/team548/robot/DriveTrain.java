@@ -1,6 +1,7 @@
 package org.usfirst.frc.team548.robot;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDController;
@@ -31,11 +32,14 @@ public class DriveTrain implements PIDOutput{
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
 		shifter = new Solenoid(Constants.DT_SOLENOID_SHIFTER);
+		
+		leftFront.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		hyro = new ADIS16448_IMU();
 		pressure = new AnalogInput(0);
-		pid = new PIDController(0.01d, 0, 0, hyro, this);
+		pid = new PIDController(0.015d, 0, 0, hyro, this);
 		LiveWindow.addActuator("Turning", "pid", pid);
-		pid.setOutputRange(-.5, 0.5);
+		pid.setOutputRange(-.7, 0.7);
 		
 	}
 
@@ -95,13 +99,13 @@ public class DriveTrain implements PIDOutput{
 
 	public void pidWrite(double output) {
 		//. 0.006 P
-//		if (Math.abs(pid.getError()) < 15d) {
-//			pid.setPID(pid.getP(), .0001, 0);
-//		} else {
-//			// I Zone
-//			pid.setPID(pid.getP(), 0, 0);
-//
-//		}
+		if (Math.abs(pid.getError()) < 7d) {
+			pid.setPID(pid.getP(), .0005, 0);
+		} else {
+			// I Zone
+			pid.setPID(pid.getP(), 0, 0);
+
+		}
 		drive(output, -output);
 	}
 	
@@ -109,9 +113,30 @@ public class DriveTrain implements PIDOutput{
 		pid.reset();
 	}
 	
+	public static double getRightEncoderDistance() {
+		return rightMini.getPosition();
+	}
+	
+	public static double getLeftEncoderDistance() {
+		return -leftFront.getPosition();
+	}
+	
+	public static double getLeftSpeed() {
+		return -leftFront.getSpeed();
+	}
+	
+	public static double getRightSpeed() {
+		return rightMini.getSpeed();
+	}
+	
+	public static void restEncoders() {
+		leftFront.setPosition(0);
+		rightMini.setPosition(0);
+	}
+	
 	public static void turnToAngle(double angle) {
 		pid.setSetpoint(angle);
-		if(pid.isEnabled()) {
+		if(!pid.isEnabled()) {
 			pid.reset();
 			pid.enable();
 		}

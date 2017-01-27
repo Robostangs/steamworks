@@ -21,6 +21,7 @@ public class TurnToAngleInTime extends AutoCommandBase {
 		if(reset) {
 			DriveTrain.restHyro();
 		}
+		DriveTrain.breakMode(true);
 	}
 
 	@Override

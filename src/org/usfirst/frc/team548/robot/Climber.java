@@ -16,4 +16,8 @@ public class Climber {
 		climbTalon = new CANTalon(Constants.CLIMB_TALONID_CLIMBTALON);
 	}
 	
+	public static void setPower(double power) {
+		climbTalon.set(power);
+	}
+	
 }
