@@ -12,6 +12,7 @@ public class Constants {
 	public static final int DT_TALONID_LEFTMINI = 6;
 	public static final int DT_SOLENOID_SHIFTER = 0;
 	public static final boolean DT_SHIFT_HIGH = true;
+	public static final double DT_DRIVE_STRAIGHT = 4.20;
 	
 	//Climber
 	public static final int CLIMB_TALONID_CLIMBTALON = 12;
@@ -25,4 +26,6 @@ public class Constants {
 	//Shooter
 	public static final int SHOOT_TALONID_TALONRIGHT= 0;
 	public static final int SHOOT_TALONID_TALONLEFT= 0;
+	//Gear Stuff
+	public static final int GEAR_SOL_PORT = 0;
 }

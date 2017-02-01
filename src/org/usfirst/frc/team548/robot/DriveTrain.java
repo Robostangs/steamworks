@@ -141,4 +141,16 @@ public class DriveTrain implements PIDOutput{
 			pid.enable();
 		}
 	}
-}
+		
+	public static void driveStraight(double power){
+		if(getAngle() >= Constants.DT_DRIVE_STRAIGHT){
+			drive(power * .08, power * .02);
+		} else if(getAngle() <= Constants.DT_DRIVE_STRAIGHT){
+			drive(power * .02, power * .08);
+		} else {
+			drive(power, power);
+		}
+	}
+		
+	}
+
