@@ -12,9 +12,11 @@ private static TeleOperated instance;
 	}
 	
 	public static XBoxController driver;
+	public static XBoxController manip;
 	
 	private TeleOperated(){
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
+		manip = new XBoxController(Constants.XB_POS_MANIP);
 	}
 	
 	public static void run(){
