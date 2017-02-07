@@ -16,11 +16,12 @@ private static TeleOperated instance;
 	
 	private TeleOperated(){
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
-		manip = new XBoxController(Constants.XB_POS_MANIP);
+		//manip = new XBoxController(Constants.XB_POS_MANIP);
 	}
 	
 	public static void run(){
-		DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+		//DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+		DriveTrain.arcadeDrice(driver.getTriggers(), Utils.negPowTwo(driver.getLeftStickXAxis()));
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
@@ -28,6 +29,9 @@ private static TeleOperated instance;
 		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());
 		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
-		Climber.setPower(driver.getTriggers());
+		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
+		Climber.setPower((driver.getPOV() == 0)? 1 : (driver.getPOV() == 180)? -1 : 0);
+		Ingestor.setRollerBarPower((driver.getYButton())? .75 : (driver.getAButton())? -.75 : 0);
+		Shooter.setShooterPower(driver.getRightStickYAxis());
 	}
 }

@@ -17,5 +17,12 @@ private static Shooter instance;
 	private Shooter() {
 		talonLeft = new CANTalon(Constants.SHOOT_TALONID_TALONLEFT);
 		talonRight = new CANTalon(Constants.SHOOT_TALONID_TALONRIGHT);
+		talonRight.enableBrakeMode(false);
+		talonLeft.enableBrakeMode(false);
+	}
+	
+	public static void setShooterPower(double p) {
+		talonLeft.set(p);
+		talonRight.set(p);
 	}
 }

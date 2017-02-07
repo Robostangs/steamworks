@@ -16,6 +16,8 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		DriveTrain.getInstance();
 		Climber.getInstance();
+		Ingestor.getInstance();
+		Shooter.getInstance();
 		TeleOperated.getInstance();
 	}
 

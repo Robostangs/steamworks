@@ -20,13 +20,13 @@ public class Constants {
 	//Ingestor
 	public static final int ING_TALONID_BOXRIGHT = 0;
 	public static final int ING_TALONID_BOXLEFT = 0;
-	public static final int ING_TALONID_ROLLERMOTOR = 0;
+	public static final int ING_TALONID_ROLLERMOTOR = 11;
 	public static final int ING_SOLENOID_GEARSOL = 0;
 	public static final int ING_SOLENOID_LEFTROLLERSOL = 0;
 	public static final int ING_SOLENOID_RIGHTROLLERSOL = 0;
 	//Shooter
-	public static final int SHOOT_TALONID_TALONRIGHT= 0;
-	public static final int SHOOT_TALONID_TALONLEFT= 0;
+	public static final int SHOOT_TALONID_TALONRIGHT= 10;
+	public static final int SHOOT_TALONID_TALONLEFT= 3;
 	//Gear Stuff
 	public static final int GEAR_SOL_PORT = 0;
 }
