@@ -143,10 +143,10 @@ public class DriveTrain implements PIDOutput{
 	}
 		
 	public static void driveStraight(double power){
-		if(getAngle() >= Constants.DT_DRIVE_STRAIGHT){
-			drive(power * .08, power * .02);
-		} else if(getAngle() <= Constants.DT_DRIVE_STRAIGHT){
-			drive(power * .02, power * .08);
+		if(getAngle() > Constants.DT_DRIVE_STRAIGHT){
+			drive(power * .8, power * 1.2);
+		} else if(getAngle() < -Constants.DT_DRIVE_STRAIGHT){
+			drive(power * 1.2, power * .8);
 		} else {
 			drive(power, power);
 		}

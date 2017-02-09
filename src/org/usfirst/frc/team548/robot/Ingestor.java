@@ -13,11 +13,12 @@ private static Ingestor instance;
 		return instance;
 	}
 	
-	private static CANTalon rollerMotor;
+	private static CANTalon rollerMotor, elevatorMotor;
 	private static Solenoid gearSol, leftRolerSol, rightRollerSol;
 	
 	private Ingestor() {
 		rollerMotor = new CANTalon(Constants.ING_TALONID_ROLLERMOTOR);
+		elevatorMotor = new CANTalon(Constants.ING_TALONID_ELEVATOR);
 		//gearSol = new Solenoid(Constants.ING_SOLENOID_GEARSOL);
 		//leftRolerSol = new Solenoid(Constants.ING_SOLENOID_LEFTROLLERSOL);
 		//rightRollerSol = new Solenoid(Constants.ING_SOLENOID_RIGHTROLLERSOL);	
@@ -25,6 +26,10 @@ private static Ingestor instance;
 	
 	public static void setRollerBarPower(double power) {
 		rollerMotor.set(power);
+	}
+	
+	public static void setElevatorPower(double power) {
+		elevatorMotor.set(power);
 	}
 	
 }

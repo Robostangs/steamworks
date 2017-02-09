@@ -18,6 +18,7 @@ public class Robot extends IterativeRobot {
 		Climber.getInstance();
 		Ingestor.getInstance();
 		Shooter.getInstance();
+		TopGear.getInstance();
 		TeleOperated.getInstance();
 	}
 
