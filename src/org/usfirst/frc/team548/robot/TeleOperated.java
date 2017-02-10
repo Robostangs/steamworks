@@ -30,7 +30,7 @@ private static TeleOperated instance;
 		/**
 		 * Manip
 		 */
-		Climber.setPower((manip.getXButton())? 1 : (manip.getAButton())? .5 : 0);
+		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
 		if(!manip.getLeftBumper()) {
 			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
 			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
@@ -40,17 +40,22 @@ private static TeleOperated instance;
 		}
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
-			Shooter.setShooterPower(manip.getRightTriggerAxis());
+			Shooter.setShooterSpeed(3000);
+			if(Shooter.getSpeed() > 2800) Shooter.setElevator(0.8);
 		} else {
-			if(manip.getRightBumper()) Shooter.setShooterPower(-0.5);
-			else Shooter.setShooterPower(0);
+			if(manip.getRightBumper()) { 
+				Shooter.setElevator(-.8);
+				Shooter.setShooterPower(-0.5);
+			} else {
+				Shooter.setShooterPower(0);
+				Shooter.setElevator(0);
+			}
 		}
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */
 		if(driver.getBButton()) DriveTrain.restHyro();
 		else if(driver.getYButton()) DriveTrain.calibrateHyro();
-		
 		//SmartDashboard stuff
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
@@ -59,5 +64,6 @@ private static TeleOperated instance;
 		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
 		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
+		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
 	}
 }

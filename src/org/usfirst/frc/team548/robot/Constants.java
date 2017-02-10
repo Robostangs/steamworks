@@ -25,6 +25,7 @@ public class Constants {
 	//Shooter
 	public static final int SHOOT_TALONID_TALONRIGHT= 10;
 	public static final int SHOOT_TALONID_TALONLEFT= 3;
+	public static final int SHOOT_TALONID_TALONELEVATOR = 1;
 	//Gear Stuff
 	public static final int GEAR_SOL_PORT = 1;
 }

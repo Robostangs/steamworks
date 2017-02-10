@@ -14,7 +14,7 @@ private static Ingestor instance;
 	}
 	
 	private static CANTalon rollerMotor, elevatorMotor;
-	private static Solenoid gearSol, leftRolerSol, rightRollerSol;
+	private static Solenoid leftRolerSol, rightRollerSol;
 	
 	private Ingestor() {
 		rollerMotor = new CANTalon(Constants.ING_TALONID_ROLLERMOTOR);

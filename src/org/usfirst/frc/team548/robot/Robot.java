@@ -42,6 +42,21 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		TeleOperated.run();
+//		SmartDashboard.putNumber("Speed", 
+//				Shooter.getSpeed());
+//		if(Math.abs(TeleOperated.driver.getTriggers()) > .1) {
+//			Shooter.setShooterPower(TeleOperated.driver.getTriggers());
+//		} else if(TeleOperated.driver.getAButton()) {
+//			Shooter.setShooterSpeed(3000);
+//		} else {
+//			Shooter.stop();
+//		}
+//		
+//		if(TeleOperated.driver.getRightBumper()) {
+//			Shooter.setElevator(0.8);
+//		} else {
+//			Shooter.setElevator(0);
+//		}
 	}
 
 	/**
@@ -49,10 +64,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		System.out.println(DriveTrain.getAngle());
-		DriveTrain.breakMode(true);
-		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
-		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
+		
+		//DriveTrain.breakMode(true);
+		//if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
+		//if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
 	}
 }
 
