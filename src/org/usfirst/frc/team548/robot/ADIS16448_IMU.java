@@ -1090,4 +1090,10 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
       table.putNumber("AngleZ", getAngleZ());
     }
   }
+  
+  @Override
+	public double pidGet() {
+		// TODO Auto-generated method stub
+		return getAngleZ();
+	}
 }

@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		new BaseLineTimeAuto().start();
+		new TestAuto().start();
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-	
+
 	}
 
 	/**
@@ -57,6 +57,7 @@ public class Robot extends IterativeRobot {
 //		} else {
 //			Shooter.setElevator(0);
 //		}
+		
 	}
 
 	/**

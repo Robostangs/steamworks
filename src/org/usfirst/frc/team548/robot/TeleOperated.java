@@ -56,6 +56,7 @@ private static TeleOperated instance;
 		 */
 		if(driver.getBButton()) DriveTrain.restHyro();
 		else if(driver.getYButton()) DriveTrain.calibrateHyro();
+		else if(driver.getXButton()) DriveTrain.restEncoders();
 		//SmartDashboard stuff
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());

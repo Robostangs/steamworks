@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-public class DriveTrain implements PIDOutput{
+public class DriveTrain implements PIDOutput {
 	private static DriveTrain instance;
 
 	public static DriveTrain getInstance() {
@@ -32,7 +32,7 @@ public class DriveTrain implements PIDOutput{
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
 		shifter = new Solenoid(Constants.DT_SOLENOID_SHIFTER);
-		
+
 		leftFront.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		hyro = new ADIS16448_IMU();
@@ -40,7 +40,7 @@ public class DriveTrain implements PIDOutput{
 		pid = new PIDController(0.015d, 0, 0, hyro, this);
 		LiveWindow.addActuator("Turning", "pid", pid);
 		pid.setOutputRange(-.7, 0.7);
-		
+
 	}
 
 	public static void drive(double leftPower, double rightPower) {
@@ -87,7 +87,7 @@ public class DriveTrain implements PIDOutput{
 	public static double getPressure() {
 		return (250d * (pressure.getVoltage() / 5d)) - 25d;
 	}
-	
+
 	public static void breakMode(boolean b) {
 		rightFront.enableBrakeMode(b);
 		rightBack.enableBrakeMode(b);
@@ -98,7 +98,7 @@ public class DriveTrain implements PIDOutput{
 	}
 
 	public void pidWrite(double output) {
-		//. 0.006 P
+		// . 0.006 P
 		if (Math.abs(pid.getError()) < 7d) {
 			pid.setPID(pid.getP(), .0005, 0);
 		} else {
@@ -108,49 +108,62 @@ public class DriveTrain implements PIDOutput{
 		}
 		drive(output, -output);
 	}
-	
+
 	public static void disablePID() {
 		pid.reset();
 	}
-	
+
 	public static double getRightEncoderDistance() {
 		return rightMini.getPosition();
 	}
-	
+
 	public static double getLeftEncoderDistance() {
 		return -leftFront.getPosition();
 	}
-	
+
+	public static double averageDistance() {
+		return (getLeftEncoderDistance() + getRightEncoderDistance()) / 2d;
+	}
+
 	public static double getLeftSpeed() {
 		return -leftFront.getSpeed();
 	}
-	
+
 	public static double getRightSpeed() {
 		return rightMini.getSpeed();
 	}
-	
+
 	public static void restEncoders() {
 		leftFront.setPosition(0);
 		rightMini.setPosition(0);
 	}
-	
+
 	public static void turnToAngle(double angle) {
 		pid.setSetpoint(angle);
-		if(!pid.isEnabled()) {
+		if (!pid.isEnabled()) {
 			pid.reset();
 			pid.enable();
 		}
 	}
-		
-	public static void driveStraight(double power){
-		if(getAngle() > Constants.DT_DRIVE_STRAIGHT){
-			drive(power * .8, power * 1.2);
-		} else if(getAngle() < -Constants.DT_DRIVE_STRAIGHT){
-			drive(power * 1.2, power * .8);
+
+	public static void driveStraight(double power) {
+		if (power > 0) {
+			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
+				drive(power * .8, power * 1.2);
+			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
+				drive(power * 1.2, power * .8);
+			} else {
+				drive(power, power);
+			}
 		} else {
-			drive(power, power);
+			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
+				drive(power * 1.2, power * .8);
+			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
+				drive(power * .8, power * 1.2);
+			} else {
+				drive(power, power);
+			}
 		}
 	}
-		
-	}
 
+}

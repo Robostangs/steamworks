@@ -42,6 +42,14 @@ public abstract class AutoMode {
         runCommand(new DriveInTime(seconds, power));
     }
     
+    protected void driveDistance(double seconds, double power, double distance, double threshold) {
+        runCommand(new DriveDistance(seconds, power, distance, threshold));
+    }
+    
+    protected void openGear(double seconds, boolean open) {
+        runCommand(new GearCommand(seconds, open));
+    }
+    
     private static void runCommand(AutoCommandBase command) {
         command.execute();
     }

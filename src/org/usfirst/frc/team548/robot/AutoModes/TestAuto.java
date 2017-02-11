@@ -10,11 +10,13 @@ public class TestAuto extends AutoMode {
 
 	@Override
 	protected void run() {
-		// TODO Auto-generated method stub
-		turnToAngleInTime(2.5, 90, true);
-		driveInTime(2, .5);
-		turnToAngleInTime(2.5, 0, false);
-		driveInTime(2, .5);
+		driveDistance(2.5, -.9, 4.8, 1.25);
+		openGear(.1, true);
+		driveDistance(1, .3, .5, 0);
+		driveDistance(1, .5, 1, .1);
+		turnToAngleInTime(1.2, 75, false);
+		driveDistance(5, 1, 8.1, 1);
+		//driveInTime(1.5, -.5);
 	}
 
 	
