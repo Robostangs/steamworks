@@ -30,6 +30,7 @@ public class DriveDistance extends AutoCommandBase {
 			
 		} else {
 			DriveTrain.stop();
+			setDone(true);
 		}
 
 	}

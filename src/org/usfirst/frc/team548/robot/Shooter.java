@@ -49,4 +49,9 @@ private static Shooter instance;
 	public static double getSpeed() {
 		return talonLeft.getSpeed();
 	}
+	
+	public static void injectAfterSpeed(double speed) {
+		setShooterSpeed(speed);
+		if(getSpeed() < speed-100) setElevator(.8);
+	}
 }

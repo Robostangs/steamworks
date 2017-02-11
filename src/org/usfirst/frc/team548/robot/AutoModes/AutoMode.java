@@ -50,6 +50,10 @@ public abstract class AutoMode {
         runCommand(new GearCommand(seconds, open));
     }
     
+    protected void shootAtSpeed(double seconds, double speed) {
+        runCommand(new ShooterCommand(seconds, speed));
+    }
+    
     private static void runCommand(AutoCommandBase command) {
         command.execute();
     }

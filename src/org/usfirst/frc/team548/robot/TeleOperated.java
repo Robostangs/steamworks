@@ -40,8 +40,7 @@ private static TeleOperated instance;
 		}
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
-			Shooter.setShooterSpeed(3000);
-			if(Shooter.getSpeed() > 2800) Shooter.setElevator(0.8);
+			Shooter.injectAfterSpeed(3000);
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);

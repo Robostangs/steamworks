@@ -1,5 +1,6 @@
 package org.usfirst.frc.team548.robot.AutoModes;
 
+import org.usfirst.frc.team548.robot.Constants;
 
 public class TestAuto extends AutoMode {
 
@@ -17,6 +18,7 @@ public class TestAuto extends AutoMode {
 		turnToAngleInTime(1.2, 75, false);
 		driveDistance(5, 1, 8.1, 1);
 		//driveInTime(1.5, -.5);
+		shootAtSpeed(4.3, Constants.SHOOT_AUTON_SPEED);
 	}
 
 	
