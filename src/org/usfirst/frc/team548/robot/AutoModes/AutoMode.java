@@ -42,8 +42,8 @@ public abstract class AutoMode {
         runCommand(new DriveInTime(seconds, power));
     }
     
-    protected void driveDistance(double seconds, double power, double distance, double threshold) {
-        runCommand(new DriveDistance(seconds, power, distance, threshold));
+    protected void driveDistance(double seconds, double power, double distance, double threshold, boolean gear) {
+        runCommand(new DriveDistance(seconds, power, distance, threshold, gear));
     }
     
     protected void openGear(double seconds, boolean open) {
@@ -52,6 +52,10 @@ public abstract class AutoMode {
     
     protected void shootAtSpeed(double seconds, double speed) {
         runCommand(new ShooterCommand(seconds, speed));
+    }
+    
+    protected void wideTurn(double seconds, double left, double right) {
+        runCommand(new WideTurnCommand(seconds, left, right));
     }
     
     private static void runCommand(AutoCommandBase command) {

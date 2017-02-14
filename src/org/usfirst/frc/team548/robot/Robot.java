@@ -36,6 +36,9 @@ public class Robot extends IterativeRobot {
 
 	}
 
+	public void teleopInit() {
+		TeleOperated.init();
+	}
 	/**
 	 * This function is called periodically during operator control
 	 */

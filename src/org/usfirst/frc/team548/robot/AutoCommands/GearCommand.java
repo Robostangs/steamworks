@@ -20,7 +20,7 @@ public class GearCommand extends AutoCommandBase {
 	@Override
 	protected void run() {
 		// TODO Auto-generated method stub
-
+		TopGear.setOpen(open);
 	}
 
 	@Override

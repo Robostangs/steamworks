@@ -66,4 +66,8 @@ private static TeleOperated instance;
 		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
 		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
 	}
+	
+	public static void init() {
+		DriveTrain.breakMode(false);
+	}
 }

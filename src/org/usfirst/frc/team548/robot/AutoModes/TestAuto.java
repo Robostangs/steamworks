@@ -8,17 +8,26 @@ public class TestAuto extends AutoMode {
 		super("Test");
 		// TODO Auto-generated constructor stub
 	}
-
+	//.869539 feet to rot
 	@Override
 	protected void run() {
-		driveDistance(2.5, -.9, 4.8, 1.25);
-		openGear(.1, true);
-		driveDistance(1, .3, .5, 0);
-		driveDistance(1, .5, 1, .1);
-		turnToAngleInTime(1.2, 75, false);
-		driveDistance(5, 1, 8.1, 1);
-		//driveInTime(1.5, -.5);
-		shootAtSpeed(4.3, Constants.SHOOT_AUTON_SPEED);
+		//MiddleGearShoot
+		driveDistance(2, -.9, 6, 1.2, false);
+		openGear(1, true);
+		driveDistance(.83, .3, .5, 0, true);
+		driveDistance(.6, .5, 1, .1, true);
+		turnToAngleInTime(.8, -75, false);
+		driveDistance(2.5, 1, 10.7, 1, false);
+		wideTurn(.45, .75, 0);
+		shootAtSpeed(7, Constants.SHOOT_AUTON_SPEED);
+		
+		
+		//Wide turn and back
+//		wideTurn(1, 0, .75);
+//		shootAtSpeed(4.0, Constants.SHOOT_AUTON_SPEED);
+//		driveDistance(2.0, -.5, 5.0, 1);
+		//turnToAngleInTime()
+		
 	}
 
 	
