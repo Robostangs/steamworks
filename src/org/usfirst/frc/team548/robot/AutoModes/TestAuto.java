@@ -11,22 +11,21 @@ public class TestAuto extends AutoMode {
 	//.869539 feet to rot
 	@Override
 	protected void run() {
-		//MiddleGearShoot
-		driveDistance(2, -.9, 6, 1.2, false);
-		openGear(1, true);
-		driveDistance(.83, .3, .5, 0, true);
-		driveDistance(.6, .5, 1, .1, true);
-		turnToAngleInTime(.8, -75, false);
-		driveDistance(2.5, 1, 10.7, 1, false);
-		wideTurn(.45, .75, 0);
-		shootAtSpeed(7, Constants.SHOOT_AUTON_SPEED);
-		
-		
+		//Fail hopper
+//		driveDistance(1.6, -.9, 8.25, 2.5, false);
+//		turnToAngleInTime(.2, -10, false);
+//		turnToAngleInTime(.5, 90, false);
+//		driveDistance(.5, .7, .7, .3, false);
+//		turnToAngleInTime(.5, 20, false);
+//		driveDistance(2.4, .9, 7.6, 1.5, false);
 		//Wide turn and back
 //		wideTurn(1, 0, .75);
 //		shootAtSpeed(4.0, Constants.SHOOT_AUTON_SPEED);
 //		driveDistance(2.0, -.5, 5.0, 1);
 		//turnToAngleInTime()
+		
+		driveDistance(3, -.9, 7.7, 1.5, false);
+		turnToAngleInTime(3, -62, false);
 		
 	}
 

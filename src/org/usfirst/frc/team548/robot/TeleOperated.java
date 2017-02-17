@@ -40,15 +40,15 @@ private static TeleOperated instance;
 		}
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
-			Shooter.injectAfterSpeed(3000);
+			Shooter.injectAfterSpeed(2800);
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);
-				Shooter.setShooterPower(-0.5);
+				//Shooter.setShooterPower(-0.5);
 			} else {
-				Shooter.setShooterPower(0);
 				Shooter.setElevator(0);
 			}
+			Shooter.setShooterPower(0);
 		}
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
