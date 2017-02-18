@@ -30,6 +30,7 @@ public class ShooterCommand extends AutoCommandBase {
 	public void end() {
 		// TODO Auto-generated method stub
 		Shooter.stop();
+		Shooter.setElevator(0);
 		
 	}
 

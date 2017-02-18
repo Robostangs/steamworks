@@ -13,6 +13,8 @@ private static TeleOperated instance;
 	
 	public static XBoxController driver;
 	public static XBoxController manip;
+	private static boolean povPressed = false;
+	private static double shooterAdjustment = 0;
 	
 	private TeleOperated(){
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
@@ -40,7 +42,7 @@ private static TeleOperated instance;
 		}
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
-			Shooter.injectAfterSpeed(2800);
+			Shooter.injectAfterSpeed(2900);
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);
@@ -48,8 +50,23 @@ private static TeleOperated instance;
 			} else {
 				Shooter.setElevator(0);
 			}
+			
 			Shooter.setShooterPower(0);
+			
 		}
+		
+		if(manip.getPOV() == 0 && !povPressed) {
+			shooterAdjustment += .0005;
+			Shooter.addF(shooterAdjustment);
+			povPressed = true;
+		} else if (manip.getPOV() == 180 && !povPressed) {
+			shooterAdjustment -= .0005;
+			Shooter.addF(shooterAdjustment);
+			povPressed = true;
+		} else if(manip.getPOV() == -1) {
+			povPressed = false;
+		}
+		
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */

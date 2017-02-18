@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		new TestAuto().start();
+		new MiddleGearAndShoot(true).start();
 	}
 
 	/**
@@ -69,9 +69,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
-		//DriveTrain.breakMode(true);
-		//if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
-		//if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
+		DriveTrain.breakMode(true);
+		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
+		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
+		System.out.println(DriveTrain.getAngle());
 	}
 }
 

@@ -19,6 +19,8 @@ private static Shooter instance;
 		talonLeft = new CANTalon(Constants.SHOOT_TALONID_TALONLEFT); //Encoder
 		talonRight = new CANTalon(Constants.SHOOT_TALONID_TALONRIGHT);
 		talonLeft.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		talonLeft.setPID(Constants.SHOOT_PID_P, Constants.SHOOT_PID_I, Constants.SHOOT_PID_D, Constants.SHOOT_PID_F, Constants.SHOOT_PID_IZONE, 0, 0);
+		
 		talonRight.changeControlMode(TalonControlMode.Follower);
 		//talonRight.reverseSensor(true);
 		talonRight.set(talonLeft.getDeviceID());
@@ -39,7 +41,7 @@ private static Shooter instance;
 	
 	public static void setShooterSpeed(double speed) {
 		talonLeft.changeControlMode(TalonControlMode.Speed);
-		talonLeft.set(3000);
+		talonLeft.set(speed);
 	}
 	
 	public static void stop() {
@@ -52,6 +54,10 @@ private static Shooter instance;
 	
 	public static void injectAfterSpeed(double speed) {
 		setShooterSpeed(speed);
-		if(getSpeed() > speed-100) setElevator(.6);
+		if(getSpeed() > speed-100) setElevator(.8);
+	}
+	
+	public static void addF(double a){
+		talonLeft.setF(Constants.SHOOT_PID_F+a);
 	}
 }

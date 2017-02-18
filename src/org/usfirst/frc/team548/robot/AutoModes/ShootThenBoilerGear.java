@@ -11,14 +11,14 @@ public class ShootThenBoilerGear extends AutoMode {
 
 	@Override
 	protected void run() {
-		wideTurn(.5, .2, 0);
+		//wideTurn(.5, .2, 0);
 		shootAtSpeed(5, Constants.SHOOT_AUTON_SPEED);
-		wideTurn(.2, .15, .15);
-		driveDistance(4, -.9, 6.9, 1, false);
-		turnToAngleInTime(.5, -10, true);
-		driveDistance(.5, .5, .86, .2, false);
-		openGear(.1, true);
-		driveDistance(1, .5, .86, 0, false);
+		wideTurn(.2, 0, -.15);
+		driveDistance(2.3, -.9, 9.5, 1, false);
+		turnToAngleInTime(.5, -18, true);
+		driveDistance(1.5, -.5, 1.7, .5, false);
+		openGear(.5, true);
+		driveDistance(1, .3, 1.5, 0, true);
 	}
 
 }

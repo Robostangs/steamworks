@@ -37,7 +37,7 @@ public class DriveTrain implements PIDOutput {
 		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		hyro = new ADIS16448_IMU();
 		pressure = new AnalogInput(0);
-		pid = new PIDController(0.015d, 0, 0, hyro, this);
+		pid = new PIDController(0.017d, 0, 0, hyro, this);
 		LiveWindow.addActuator("Turning", "pid", pid);
 		pid.setOutputRange(-.7, 0.7);
 
@@ -99,8 +99,8 @@ public class DriveTrain implements PIDOutput {
 
 	public void pidWrite(double output) {
 		// . 0.006 P
-		if (Math.abs(pid.getError()) < 7d) {
-			pid.setPID(pid.getP(), .0005, 0);
+		if (Math.abs(pid.getError()) < 5d) {
+			pid.setPID(pid.getP(), .001, 0);
 		} else {
 			// I Zone
 			pid.setPID(pid.getP(), 0, 0);
