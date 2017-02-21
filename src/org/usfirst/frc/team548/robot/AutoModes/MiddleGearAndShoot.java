@@ -16,12 +16,12 @@ public class MiddleGearAndShoot extends AutoMode {
 		openGear(.2, true);
 		driveDistance(.63, .3, .5, 0, true);
 		driveDistance(.6, .5, 1, .1, false);
-		if(isRed) turnToAngleInTime(.7, 75, false);
-		else turnToAngleInTime(.7, -75, false);
+		if(isRed) turnToAngleInTime(.7, 65, false);
+		else turnToAngleInTime(.7, -65, false);
 		driveDistance(2.1, 1, 10.9, 1, false);
 		if (!isRed) wideTurn(.45, .75, 0);
 		else wideTurn(.45, .75, 0);
-		//shootAtSpeed(8, Constants.SHOOT_AUTON_SPEED);
+		shootAtSpeed(8, Constants.SHOOT_AUTON_SPEED);
 	}
 
 }

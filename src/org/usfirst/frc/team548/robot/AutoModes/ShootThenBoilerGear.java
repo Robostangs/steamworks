@@ -13,8 +13,10 @@ public class ShootThenBoilerGear extends AutoMode {
 	protected void run() {
 		//wideTurn(.5, .2, 0);
 		shootAtSpeed(5, Constants.SHOOT_AUTON_SPEED);
-		wideTurn(.2, 0, -.15);
-		driveDistance(2.3, -.9, 9.5, 1, false);
+		driveDistance(.5, -.5, 1, .3, false);
+		//wideTurn(.2, 0, -.15);
+		turnToAngleInTime(.5, 10, false);
+		driveDistance(2.7, -.9, 8.6, 1, false);
 		turnToAngleInTime(.5, -18, true);
 		driveDistance(1.5, -.5, 1.7, .5, false);
 		openGear(.5, true);

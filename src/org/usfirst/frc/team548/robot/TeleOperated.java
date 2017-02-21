@@ -1,10 +1,15 @@
 package org.usfirst.frc.team548.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleOperated {
 
 private static TeleOperated instance;
+private static Timer timer;
+private static int wiggle = 0;
+	
+	
 	
 	public static TeleOperated getInstance() {
 		if(instance == null) instance = new TeleOperated();
@@ -19,14 +24,23 @@ private static TeleOperated instance;
 	private TeleOperated(){
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
 		manip = new XBoxController(Constants.XB_POS_MANIP);
+		timer = new Timer();
 	}
 	
 	public static void run(){
 		/**
 		 * Driver
 		 */
-		if(driver.getAButton()) DriveTrain.driveStraight(0.5);
-		else DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+		if(driver.getAButton()){
+			if(wiggle < 4){
+				DriveTrain.drive(-0.25, -.25);
+			}
+			else if(wiggle >= 4){
+				DriveTrain.drive(0.25, 0.25);
+			}	
+			wiggle ++;
+			if (wiggle > 8) wiggle = 0;
+		} else DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		
 		/**
@@ -73,6 +87,10 @@ private static TeleOperated instance;
 		if(driver.getBButton()) DriveTrain.restHyro();
 		else if(driver.getYButton()) DriveTrain.calibrateHyro();
 		else if(driver.getXButton()) DriveTrain.restEncoders();
+		
+		
+		
+		
 		//SmartDashboard stuff
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
