@@ -33,10 +33,10 @@ private static int wiggle = 0;
 		 */
 		if(driver.getAButton()){
 			if(wiggle < 4){
-				DriveTrain.drive(-0.25, -.25);
+				DriveTrain.drive(-Constants.DT_WIGGLE_POWER, -Constants.DT_WIGGLE_POWER);
 			}
 			else if(wiggle >= 4){
-				DriveTrain.drive(0.25, 0.25);
+				DriveTrain.drive(Constants.DT_WIGGLE_POWER, Constants.DT_WIGGLE_POWER);
 			}	
 			wiggle ++;
 			if (wiggle > 8) wiggle = 0;
@@ -57,10 +57,12 @@ private static int wiggle = 0;
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
 			Shooter.injectAfterSpeed(2900);
+			System.out.println(Shooter.getSpeed());
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);
 				//Shooter.setShooterPower(-0.5);
+				
 			} else {
 				Shooter.setElevator(0);
 			}

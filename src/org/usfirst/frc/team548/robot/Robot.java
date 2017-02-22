@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		new HopperThenScore(true).start();
+		new ShootThenBoilerGear().start();
 	}
 
 	/**

@@ -14,6 +14,7 @@ public class Constants {
 	public static final int DT_SOLENOID_SHIFTER = 0;
 	public static final boolean DT_SHIFT_HIGH = true;
 	public static final double DT_DRIVE_STRAIGHT = 1.20;
+	public static final double DT_WIGGLE_POWER = .25;
 	
 	//Climber
 	public static final int CLIMB_TALONID_CLIMBTALON = 12;
@@ -28,8 +29,8 @@ public class Constants {
 	public static final int SHOOT_TALONID_TALONELEVATOR = 1;
 	public static final int SHOOT_AUTON_SPEED = 3050;
 	
-	public static final double SHOOT_PID_P = .01;
-	public static final double SHOOT_PID_I = .00001;
+	public static final double SHOOT_PID_P = .075;
+	public static final double SHOOT_PID_I = .00;
 	public static final double SHOOT_PID_D = 0;
 	public static final double SHOOT_PID_F = .0232;
 	public static final int SHOOT_PID_IZONE = 50;
