@@ -57,18 +57,14 @@ private static int wiggle = 0;
 		TopGear.setOpen(manip.getBButton());
 		if(manip.getRightTriggerButton()) {
 			Shooter.injectAfterSpeed(2900);
-			System.out.println(Shooter.getSpeed());
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);
-				//Shooter.setShooterPower(-0.5);
-				
+				//Shooter.setShooterPower(-0.5);	
 			} else {
 				Shooter.setElevator(0);
 			}
-			
 			Shooter.setShooterPower(0);
-			
 		}
 		
 		if(manip.getPOV() == 0 && !povPressed) {
