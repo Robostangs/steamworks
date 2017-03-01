@@ -8,7 +8,7 @@ public class TeleOperated {
 private static TeleOperated instance;
 private static Timer timer;
 private static int wiggle = 0;
-	
+private static boolean yPressed = false;
 	
 	
 	public static TeleOperated getInstance() {
@@ -18,7 +18,8 @@ private static int wiggle = 0;
 	
 	public static XBoxController driver;
 	public static XBoxController manip;
-	private static boolean povPressed = false;
+	private static boolean povPressed = false, timerStart = false;
+	
 	private static double shooterAdjustment = 0;
 	
 	private TeleOperated(){
@@ -40,7 +41,32 @@ private static int wiggle = 0;
 			}	
 			wiggle ++;
 			if (wiggle > 8) wiggle = 0;
-		} else DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+		} else {
+			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+		}
+		if(manip.getStartButton()) {
+			if(!timerStart) {
+				timer.start();
+				timerStart = true;
+			}
+			
+				TopGear.setOpen(true);
+			
+			if(timer.get() > .3 && timer.get() < 1) {
+				Climber.setClimbOpen(true);
+			} else if(timer.get() > 1) {
+				Climber.setClimbOpen(false);
+			}
+			
+			//DriveTrain.drive(.3, .3);
+		} 
+		else{
+			
+			timerStart = false;
+			timer.reset();
+		}
+		
+		
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		
 		/**
@@ -54,7 +80,10 @@ private static int wiggle = 0;
 			Ingestor.setElevatorPower(-.8);
 			Ingestor.setRollerBarPower(-.8); 
 		}
-		TopGear.setOpen(manip.getBButton());
+		if(!manip.getStartButton()) {
+			TopGear.setOpen(manip.getBButton());
+		}
+		
 		if(manip.getRightTriggerButton()) {
 			Shooter.injectAfterSpeed(2900);
 		} else {
@@ -79,6 +108,16 @@ private static int wiggle = 0;
 			povPressed = false;
 		}
 		
+		if(manip.getYButton() && !yPressed) {
+			Climber.setClimbOpen(!Climber.isOpen());
+			yPressed = true;
+		} else if(yPressed && !manip.getYButton()) {
+			yPressed = false;
+		}
+		
+	
+		
+		Ingestor.setRollerBarDown(manip.getBackButton());
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */

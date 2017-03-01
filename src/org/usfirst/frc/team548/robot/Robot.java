@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		new BaseLineTimeAuto().start();
+		new HopperThenScore(true).start();
 	}
 
 	/**
