@@ -17,15 +17,15 @@ public class HopperThenScore extends AutoMode {
 		driveDistance(2, -.9, 6.2, 1.5, false);
 		if(isRed) turnToAngleInTime(.8, -90, false);
 		else turnToAngleInTime(.8, 90, false);
-		driveDistance(1, .5, 1.8, .5, false);
+		driveDistance(1, .5, 2.5, .5, false);
 		waitTime(1);
 		driveDistance(.5, -.5, .5, 0, false);
 		if(isRed) turnToAngleInTime(.8, 90, false);
 		else turnToAngleInTime(.8, -90, false);
-		driveDistance(1.3, .9, 4.5, 1.0, false);
-		if(isRed) wideTurn(1, 0, 0.4);
-		else wideTurn(1, .4, .0);
-		shootAtSpeed(6.6, Constants.SHOOT_AUTON_SPEED);
+		driveDistance(1, .9, 4.25, 1.0, false);
+		if(isRed) wideTurn(1, 0.1, 0.6);
+		else wideTurn(1, .6, .1);
+		shootAtSpeed(7.9, Constants.SHOOT_AUTON_SPEED);
 	}
 
 }

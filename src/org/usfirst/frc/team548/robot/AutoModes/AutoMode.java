@@ -57,6 +57,13 @@ public abstract class AutoMode {
     protected void wideTurn(double seconds, double left, double right) {
         runCommand(new WideTurnCommand(seconds, left, right));
     }
+    /**
+     * TIME MUST BE BIGGER THAN 1.5
+     * @param sec
+     */
+    protected void GearRFT(double sec) {
+    	runCommand(new GearRFTCommand(sec));
+    }
     
     private static void runCommand(AutoCommandBase command) {
         command.execute();

@@ -23,9 +23,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	
+	//true is red, false is blue
 	@Override
 	public void autonomousInit() {
-		new BaseLineTimeAuto().start();
+		new SideGear(false).start();
 	}
 
 	/**
@@ -75,5 +76,8 @@ public class Robot extends IterativeRobot {
 		System.out.println(Shooter.getSpeed());
 		
 	}
+	@Override
+	public void disabledPeriodic() {
+		if(TeleOperated.driver.getAButton()) DriveTrain.calibrateHyro();
+	}
 }
-

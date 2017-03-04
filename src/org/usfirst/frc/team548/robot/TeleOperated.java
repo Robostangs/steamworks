@@ -5,28 +5,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleOperated {
 
-private static TeleOperated instance;
-private static Timer timer;
-private static int wiggle = 0;
-	
-	
-	
+	private static TeleOperated instance;
+	private static Timer timer;
+	private static int wiggle = 0;
+	private static boolean yPressed = false, dPressed = false;
+
 	public static TeleOperated getInstance() {
-		if(instance == null) instance = new TeleOperated();
+		if (instance == null)
+			instance = new TeleOperated();
 		return instance;
 	}
-	
+
 	public static XBoxController driver;
 	public static XBoxController manip;
-	private static boolean povPressed = false;
+	private static boolean povPressed = false, timerStart = false;
+
 	private static double shooterAdjustment = 0;
-	
-	private TeleOperated(){
+
+	private TeleOperated() {
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
 		manip = new XBoxController(Constants.XB_POS_MANIP);
 		timer = new Timer();
 	}
-	
+
 	public static void run(){
 		/**
 		 * Driver
@@ -40,7 +41,47 @@ private static int wiggle = 0;
 			}	
 			wiggle ++;
 			if (wiggle > 8) wiggle = 0;
-		} else DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+			
+			}
+		
+		else if (driver.getXButton()){
+			DriveTrain.drive(.15, .15);
+		} else if (driver.getYButton()){
+			//DriveTrain.drive(.1, .1);
+			if(!dPressed){
+				DriveTrain.restEncoders();
+				dPressed = true;
+			}
+			DriveTrain.moveDistance(.14 , .12, 0);
+			
+		} else {
+			dPressed = false;
+			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+			//DriveTrain.humanDrive(driver.getLeftStickYAxis(), driver.getRightStickYAxis());
+		}
+		if(manip.getStartButton()) {
+			if(!timerStart) {
+				timer.start();
+				timerStart = true;
+			}
+			
+				TopGear.setOpen(true);
+			
+			if(timer.get() > .3 && timer.get() < 1) {
+				Climber.setClimbOpen(true);
+			} else if(timer.get() > 1) {
+				Climber.setClimbOpen(false);
+			}
+			
+			//DriveTrain.drive(.3, .3);
+		} 
+		else{
+			
+			timerStart = false;
+			timer.reset();
+		}
+		
+		
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		
 		/**
@@ -54,21 +95,21 @@ private static int wiggle = 0;
 			Ingestor.setElevatorPower(-.8);
 			Ingestor.setRollerBarPower(-.8); 
 		}
-		TopGear.setOpen(manip.getBButton());
+		if(!manip.getStartButton()) {
+			TopGear.setOpen(manip.getBButton());
+		}
+		
+		
 		if(manip.getRightTriggerButton()) {
-			Shooter.injectAfterSpeed(2900);
-			System.out.println(Shooter.getSpeed());
+			Shooter.injectAfterSpeed(2820);
 		} else {
 			if(manip.getRightBumper()) { 
 				Shooter.setElevator(-.8);
-				//Shooter.setShooterPower(-0.5);
-				
+				//Shooter.setShooterPower(-0.5);	
 			} else {
 				Shooter.setElevator(0);
 			}
-			
 			Shooter.setShooterPower(0);
-			
 		}
 		
 		if(manip.getPOV() == 0 && !povPressed) {
@@ -82,13 +123,39 @@ private static int wiggle = 0;
 		} else if(manip.getPOV() == -1) {
 			povPressed = false;
 		}
+		if(manip.getYButton()) {
+			Climber.setClimbOpen(true);
+		} else if(manip.getAButton()) {
+			Climber.setClimbOpen(false);
+		}
+		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
+//		if(manip.getYButton() && !yPressed) {
+//			Climber.setClimbOpen(!Climber.isOpen());
+//			yPressed = true;
+//		} else if(yPressed && !manip.getYButton()) {
+//			yPressed = false;
+//		}
+//		
 		
+		if(manip.getPOV() == 90) {
+			Ingestor.setIngestorWall(true);
+			Ingestor.setRollerBarDown(true);
+		} else if(manip.getPOV() == 270 ) {
+			Ingestor.setIngestorWall(false);
+			Ingestor.setRollerBarDown(false);
+		}
+		
+		
+		
+	
+
+		//Ingestor.setRollerBarDown(!manip.getBackButton());
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */
-		if(driver.getBButton()) DriveTrain.restHyro();
-		else if(driver.getYButton()) DriveTrain.calibrateHyro();
-		else if(driver.getXButton()) DriveTrain.restEncoders();
+//		if(driver.getBButton()) DriveTrain.restHyro();
+//		else if(driver.getYButton()) DriveTrain.calibrateHyro();
+//		else if(driver.getXButton()) DriveTrain.restEncoders();
 		
 		
 		
@@ -102,9 +169,25 @@ private static int wiggle = 0;
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
 		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
 		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
+		SmartDashboard.putBoolean("Ready for takeoff", Climber.isOpen());
 	}
-	
+
 	public static void init() {
 		DriveTrain.breakMode(false);
 	}
+
+	// MANIP
+	// Start: Gear during teleop
+	// Right Trigger: shoot and elevator for fuel
+	// Right Bumper: reverse shooter elevator
+	// B Button: open & close gears
+	// Y BUtton: enable/disable RFT
+	// Right/Left on dpad: expand/compress shooter wall
+	// up/down on dpad: up/down with the power of the shooter
+	// x button: set elevator power
+	// y button: set elevator bar power
+	// Driver
+	// A Button: wiggle
+	// alex's weird controls
+
 }

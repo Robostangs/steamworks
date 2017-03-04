@@ -8,7 +8,8 @@ public class ShootThenBoilerGear extends AutoMode {
 		super("Shoot then gear");
 		// TODO Auto-generated constructor stub
 	}
-
+	// Only red, also does not work very well probably
+	
 	@Override
 	protected void run() {
 		//wideTurn(.5, .2, 0);

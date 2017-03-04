@@ -9,7 +9,8 @@ public class BaseLineTimeAuto extends AutoMode {
 
 	@Override
 	protected void run() {
-		driveInTime(1.5, .75);
+		driveInTime(4.5, .75);
+		//lol
 	}
 
 }

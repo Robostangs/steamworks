@@ -10,7 +10,7 @@ public class OnlyShoot extends AutoMode {
 
 	@Override
 	protected void run() {
-		shootAtSpeed(7, Constants.SHOOT_AUTON_SPEED);
+		shootAtSpeed(12, Constants.SHOOT_AUTON_SPEED);
 	}
 
 }

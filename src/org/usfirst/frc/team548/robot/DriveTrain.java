@@ -83,6 +83,12 @@ public class DriveTrain implements PIDOutput {
 	public static void calibrateHyro() {
 		hyro.calibrate();
 	}
+	
+	public static void moveDistance(double distance, double power, double threshold){
+		if(Math.abs(DriveTrain.averageDistance()) < distance) { 
+			DriveTrain.drive(power, power);
+		} else DriveTrain.drive(0, 0);
+	}
 
 	public static double getPressure() {
 		return (250d * (pressure.getVoltage() / 5d)) - 25d;
@@ -144,6 +150,14 @@ public class DriveTrain implements PIDOutput {
 			pid.reset();
 			pid.enable();
 		}
+	}
+	
+	public static void humanDrive(double left, double right){
+		if(Math.abs(left) < .2 && Math.abs(right) < .2){
+			left = 0;
+			right = 0;
+		}
+		drive(left, right);
 	}
 
 	public static void driveStraight(double power) {
