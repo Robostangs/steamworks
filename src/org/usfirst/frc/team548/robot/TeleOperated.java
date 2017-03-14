@@ -1,5 +1,6 @@
 package org.usfirst.frc.team548.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -73,13 +74,13 @@ private static boolean yPressed = false;
 		 * Manip
 		 */
 		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
-		if(!manip.getLeftBumper()) {
-			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
-			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
-		} else {
-			Ingestor.setElevatorPower(-.8);
-			Ingestor.setRollerBarPower(-.8); 
-		}
+//		if(!manip.getLeftBumper()) {
+//			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
+//			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
+//		} else {
+//			Ingestor.setElevatorPower(-.8);
+//			Ingestor.setRollerBarPower(-.8); 
+//		}
 		if(!manip.getStartButton()) {
 			TopGear.setOpen(manip.getBButton());
 		}
@@ -117,13 +118,13 @@ private static boolean yPressed = false;
 		
 	
 		
-		Ingestor.setRollerBarDown(manip.getBackButton());
+		//Ingestor.setRollerBarDown(manip.getBackButton());
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */
-		if(driver.getBButton()) DriveTrain.restHyro();
-		else if(driver.getYButton()) DriveTrain.calibrateHyro();
-		else if(driver.getXButton()) DriveTrain.restEncoders();
+//		if(driver.getBButton()) DriveTrain.restHyro();
+//		else if(driver.getYButton()) DriveTrain.calibrateHyro();
+//		else if(driver.getXButton()) DriveTrain.restEncoders();
 		
 		
 		
@@ -137,6 +138,33 @@ private static boolean yPressed = false;
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
 		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
 		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
+//		/**
+//		 * JAREDS CRAP BELOW
+//		 */
+//		
+//		DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+//		if(!driver.getStartButton()) {
+//			TopGear.setOpen(driver.getBButton());
+//		}
+//		
+//		if(driver.getRightTriggerButton()) {
+//			Shooter.injectAfterSpeed(2900);
+//		} else {
+//			if(driver.getRightBumper()) { 
+//				Shooter.setElevator(-.8);
+//				//Shooter.setShooterPower(-0.5);	
+//			} else {
+//				Shooter.setElevator(0);
+//			}
+//			Shooter.setShooterPower(0);
+//		}
+//		
+//		if(driver.getYButton()) {
+//			new Compressor(0).start();
+//		} else {
+//			new Compressor(0).stop();
+//		}
+//		
 	}
 	
 	public static void init() {

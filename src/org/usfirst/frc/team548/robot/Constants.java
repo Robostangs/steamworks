@@ -28,7 +28,7 @@ public class Constants {
 	public static final int SHOOT_TALONID_TALONRIGHT= 10;
 	public static final int SHOOT_TALONID_TALONLEFT= 3;
 	public static final int SHOOT_TALONID_TALONELEVATOR = 1;
-	public static final int SHOOT_AUTON_SPEED = 3050;
+	public static final int SHOOT_AUTON_SPEED = 3100;
 	
 	public static final double SHOOT_PID_P = .075;
 	public static final double SHOOT_PID_I = .00;
@@ -37,4 +37,9 @@ public class Constants {
 	public static final int SHOOT_PID_IZONE = 50;
 	//Gear Stuff
 	public static final int GEAR_SOL_PORT = 1;
+	
+	//Gear Ingestor
+	public static final int GEARING_TALONID_ARM = 2;
+	public static final int GEARING_TALONID_ROLLER = 11;
+	public static final int GEARING_SOL_PORT = 3;
 }

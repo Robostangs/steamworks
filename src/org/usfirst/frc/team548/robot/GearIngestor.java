@@ -1,0 +1,87 @@
+package org.usfirst.frc.team548.robot;
+
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.TalonControlMode;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
+
+public class GearIngestor {
+
+	private static GearIngestor instance;
+	private static CANTalon arm, roller;
+	private static Solenoid sol;
+	private static boolean currentLimiting = false, startedTimer = false;
+	private static Timer currentTimer;
+	
+	public static GearIngestor getInstance() {
+		if(instance == null) instance= new GearIngestor();
+		return instance;
+	}
+	
+	private GearIngestor() {
+		sol = new Solenoid(Constants.GEARING_SOL_PORT);
+		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
+		arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		arm.changeControlMode(TalonControlMode.Position);
+		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
+		currentTimer = new Timer();
+	}
+	
+	public static void setDoorOpen(boolean b) {
+		sol.set(b);
+	}
+	
+	public static boolean isOpen() {
+		return sol.get();
+	}
+	
+	public static void rollerIngestCurrentLimiting() {
+		
+		if(!currentLimiting) {
+			if(!startedTimer && Robot.PDP.getCurrent(11) > 10) {
+				startedTimer = true;
+				currentTimer.reset();
+				currentTimer.start();
+			} else if(Robot.PDP.getCurrent(11) < 10 && startedTimer) {
+				startedTimer = false;
+				currentTimer.stop();
+			} else if(currentTimer.get() > .4 && startedTimer) {
+				currentLimiting = true;
+				startedTimer = false;
+				//roller.set(p*.25);
+			} 
+			roller.set(-.4);
+		} else {
+			roller.set(-.25);
+			if(Robot.PDP.getCurrent(11) < 4) currentLimiting = false;
+		}
+	}
+	
+	public static void setRollerBarPower(double p) {
+		roller.set(p);
+	}
+	
+	public static void stop() {
+		setRollerBarPower(0);
+		
+	}
+	
+	
+	public static void setArmPos(double pos) {
+		arm.changeControlMode(TalonControlMode.Position);
+		arm.set(pos);
+	}
+	
+	public static void setArmPower(double power) {
+		arm.changeControlMode(TalonControlMode.PercentVbus);
+		arm.set(0);
+	}
+	public static double getArmPos() {
+		return arm.getPosition();
+	}
+	
+	
+}

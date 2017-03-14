@@ -54,7 +54,7 @@ private static Shooter instance;
 	
 	public static void injectAfterSpeed(double speed) {
 		setShooterSpeed(speed);
-		if(getSpeed() > speed-45) setElevator(.65);
+		if(getSpeed() > speed-45) setElevator(.4);
 	}
 	
 	public static void addF(double a){
