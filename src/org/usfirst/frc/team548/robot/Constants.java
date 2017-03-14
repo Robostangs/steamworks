@@ -39,4 +39,9 @@ public class Constants {
 	public static final int SHOOT_PID_IZONE = 50;
 	//Gear Stuff
 	public static final int GEAR_SOL_PORT = 5;
+	
+	//Gear Ingestor
+	public static final int GEARING_TALONID_ARM = 2;
+	public static final int GEARING_TALONID_ROLLER = 11;
+	public static final int GEARING_SOL_PORT = 3;
 }
