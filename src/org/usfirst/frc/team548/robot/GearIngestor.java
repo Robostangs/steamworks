@@ -24,7 +24,7 @@ public class GearIngestor {
 	private GearIngestor() {
 		sol = new Solenoid(Constants.GEARING_SOL_PORT);
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
-		arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
@@ -40,11 +40,11 @@ public class GearIngestor {
 	
 	public static void rollerIngestCurrentLimiting() {
 		if(!currentLimiting) {
-			if(!startedTimer && Robot.PDP.getCurrent(11) > 10) {
+			if(!startedTimer && Robot.PDP.getCurrent(5) > 10) {
 				startedTimer = true;
 				currentTimer.reset();
 				currentTimer.start();
-			} else if(Robot.PDP.getCurrent(11) < 10 && startedTimer) {
+			} else if(Robot.PDP.getCurrent(5) < 10 && startedTimer) {
 				startedTimer = false;
 				currentTimer.stop();
 			} else if(currentTimer.get() > .4 && startedTimer) {
@@ -52,10 +52,10 @@ public class GearIngestor {
 				startedTimer = false;
 				//roller.set(p*.25);
 			} 
-			roller.set(-.4);
+			roller.set(-.7);
 		} else {
 			roller.set(-.25);
-			if(Robot.PDP.getCurrent(11) < 4) currentLimiting = false;
+			if(Robot.PDP.getCurrent(5) < 1) currentLimiting = false;
 		}
 	}
 	
@@ -63,9 +63,13 @@ public class GearIngestor {
 		roller.set(p);
 	}
 	
-	public static void stop() {
+	public static void stopRoller() {
 		setRollerBarPower(0);
 		
+	}
+	
+	public static void stopArm() {
+		setArmPower(0);
 	}
 	
 	
@@ -76,11 +80,28 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		arm.set(0);
+		if(power > 0&& getArmPos() > Constants.GEARING_MAX) arm.set(0);
+		else if(power < 0&& getArmPos() < Constants.GEARING_MIN) arm.set(0);
+		else arm.set(power);
 	}
 	public static double getArmPos() {
-		return arm.getPosition();
+		return arm.getEncPosition();
 	}
 	
+	public static double getAbsPos() {
+		return (arm.getPulseWidthPosition() & 0xFFF)/4095d;
+	}
+	
+	public static boolean isGearInIngestor() {
+		return currentLimiting;
+	}
+	
+	public static void setArmEncPos(int pos) {
+		arm.setEncPosition(pos);
+	}
+	
+	public static void setArmOffSet() {
+		setArmEncPos((int)((getAbsPos()-Constants.GEARING_ZERO)*4095));
+	}
 	
 }

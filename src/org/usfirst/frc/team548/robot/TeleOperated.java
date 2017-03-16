@@ -1,5 +1,6 @@
 package org.usfirst.frc.team548.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,7 +21,7 @@ public class TeleOperated {
 	public static XBoxController manip;
 	private static boolean povPressed = false, timerStart = false;
 
-	private static double shooterAdjustment = 0;
+	//private static double shooterAdjustment = 0;
 
 	private TeleOperated() {
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
@@ -41,10 +42,7 @@ public class TeleOperated {
 			}	
 			wiggle ++;
 			if (wiggle > 8) wiggle = 0;
-			
-			}
-		
-		else if (driver.getXButton()){
+		} else if (driver.getXButton()){
 			DriveTrain.drive(.15, .15);
 		} else if (driver.getYButton()){
 			//DriveTrain.drive(.1, .1);
@@ -59,51 +57,50 @@ public class TeleOperated {
 			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
 			//DriveTrain.humanDrive(driver.getLeftStickYAxis(), driver.getRightStickYAxis());
 		}
-		if(manip.getStartButton()) {
-			if(!timerStart) {
-				timer.start();
-				timerStart = true;
-			}
-			
-				TopGear.setOpen(true);
-			
-			if(timer.get() > .3 && timer.get() < 1) {
-				Climber.setClimbOpen(true);
-			} else if(timer.get() > 1) {
-				Climber.setClimbOpen(false);
-			}
-			
-			//DriveTrain.drive(.3, .3);
-		} 
-		else{
-			
-			timerStart = false;
-			timer.reset();
-		}
-		
+		if(DriverStation.getInstance().isBrownedOut()) driver.setRightRumble(1);
+		else driver.setRightRumble(0);
 		
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		
 		/**
 		 * Manip
 		 */
-		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
-		if(!manip.getLeftBumper()) {
-			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
-			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
-		} else {
-			Ingestor.setElevatorPower(-.8);
-			Ingestor.setRollerBarPower(-.8); 
-		}
-		if(!manip.getStartButton()) {
-			TopGear.setOpen(manip.getBButton());
-		}
+		Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
+//		if(!manip.getLeftBumper()) {
+//			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
+//			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
+//		} else {
+//			Ingestor.setElevatorPower(-.8);
+//			Ingestor.setRollerBarPower(-.8); 
+//		}
+			if(!manip.getAButton()) TopGear.setOpen(manip.getXButton());
 		
+			if(manip.getAButton()) {
+				if(!timerStart) {
+					timer.start();
+					timerStart = true;
+				}
+				
+					TopGear.setOpen(true);
+				
+				if(timer.get() > .3 && timer.get() < 1) {
+					Climber.setClimbOpen(true);
+				} else if(timer.get() > 1) {
+					Climber.setClimbOpen(false);
+				}
+				
+				//DriveTrain.drive(.3, .3);
+			} 
+			else{
+				
+				timerStart = false;
+				timer.reset();
+			}
 		
-		if(manip.getRightTriggerButton()) {
+		if(manip.getLeftTriggerButton()) {
 			Shooter.injectAfterSpeed(2820);
 		} else {
-			if(manip.getRightBumper()) { 
+			if(manip.getLeftBumper()) { 
 				Shooter.setElevator(-.8);
 				//Shooter.setShooterPower(-0.5);	
 			} else {
@@ -112,37 +109,94 @@ public class TeleOperated {
 			Shooter.setShooterPower(0);
 		}
 		
-		if(manip.getPOV() == 0 && !povPressed) {
-			shooterAdjustment += .0005;
-			Shooter.addF(shooterAdjustment);
-			povPressed = true;
-		} else if (manip.getPOV() == 180 && !povPressed) {
-			shooterAdjustment -= .0005;
-			Shooter.addF(shooterAdjustment);
-			povPressed = true;
-		} else if(manip.getPOV() == -1) {
-			povPressed = false;
+		
+		//Gear Ingestor
+		if (!manip.getXButton()) {
+			//Roller
+			if (manip.getRightBumper()) {
+				manip.setLeftRumble(0);
+				driver.setLeftRumble(0);
+				GearIngestor.setRollerBarPower(.7d);
+			} else if (GearIngestor.getAbsPos() < Constants.GEARING_ZERO + 300) {
+				GearIngestor.rollerIngestCurrentLimiting();
+				if (GearIngestor.isGearInIngestor()) {
+					manip.setLeftRumble(1);
+					driver.setLeftRumble(1);
+				}
+			} else if (manip.getPOV() == 90) {
+				GearIngestor.rollerIngestCurrentLimiting();
+				if (GearIngestor.isGearInIngestor()) {
+					manip.setLeftRumble(1);
+					driver.setLeftRumble(1);
+				}
+			} else {
+
+				manip.setLeftRumble(0);
+				driver.setLeftRumble(0);
+				GearIngestor.setRollerBarPower(0);
+			}
+
+			// ARM
+			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
+				GearIngestor.setArmPower(-manip.getLeftStickYAxis());
+			} else if (manip.getYButton()) {
+				GearIngestor.setArmPos(Constants.GEARING_MAX);
+			} else if (manip.getRightTriggerButton()) {
+				GearIngestor.setArmPower(-1);
+				// GearIngestor.setArmPos(Constants.GEARING_MIN+.02);
+			} else if(manip.getStartButton()){
+				if(wiggle < 4){
+					GearIngestor.setArmPower(-.5);
+				}
+				else if(wiggle >= 4){
+					GearIngestor.setArmPower(.5);
+				}	
+				wiggle ++;
+				if (wiggle > 8) wiggle = 0;
+			} else {
+				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
+				/// GearIngestor.stopArm();
+			}
+		} else {
+			GearIngestor.setArmPower(-.7);//Go down
+			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
-		if(manip.getYButton()) {
-			Climber.setClimbOpen(true);
-		} else if(manip.getAButton()) {
-			Climber.setClimbOpen(false);
-		}
-		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
+		
+		//GearIngestor.setDoorOpen(manip.getPOV() == 90);
+		//POV CRAP
+//		if(manip.getPOV() == 0 && !povPressed) {
+//			shooterAdjustment += .0005;
+//			Shooter.addF(shooterAdjustment);
+//			povPressed = true;
+//		} else if (manip.getPOV() == 180 && !povPressed) {
+//			shooterAdjustment -= .0005;
+//			Shooter.addF(shooterAdjustment);
+//			povPressed = true;
+//		} else if(manip.getPOV() == -1) {
+//			povPressed = false;
+//		}
+		
+		
+//		if(manip.getYButton()) {
+//			Climber.setClimbOpen(true);
+//		} else if(manip.getAButton()) {
+//			Climber.setClimbOpen(false);
+//		}
 //		if(manip.getYButton() && !yPressed) {
 //			Climber.setClimbOpen(!Climber.isOpen());
 //			yPressed = true;
 //		} else if(yPressed && !manip.getYButton()) {
 //			yPressed = false;
 //		}
+		
+		if(Climber.isOpen()) manip.setRightRumble(1);
+		else manip.setRightRumble(0);
 //		
 		
-		if(manip.getPOV() == 90) {
-			Ingestor.setIngestorWall(true);
-			Ingestor.setRollerBarDown(true);
-		} else if(manip.getPOV() == 270 ) {
-			Ingestor.setIngestorWall(false);
-			Ingestor.setRollerBarDown(false);
+		if(manip.getPOV() == 180) {
+			Climber.setClimbOpen(true);
+		} else if(manip.getPOV() == 90 ) {
+			Climber.setClimbOpen(false);
 		}
 		
 		

@@ -4,11 +4,15 @@ import org.usfirst.frc.team548.robot.AutoModes.*;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
-
+	
+	AutoMode autonCommand;
+	SendableChooser austinChooser;
 	
 	public static PowerDistributionPanel PDP;
 	/**
@@ -22,15 +26,23 @@ public class Robot extends IterativeRobot {
 		//Ingestor.getInstance();
 		Shooter.getInstance();
 		TopGear.getInstance();
+		GearIngestor.getInstance();
 		TeleOperated.getInstance();
 		PDP = new PowerDistributionPanel();
+		
+		austinChooser = new SendableChooser<AutoMode>();
+		austinChooser.addDefault("Shoot Only", new OnlyShoot());
+		austinChooser.addObject("Middle Gear Then Shoot Red", new MiddleGearAndShoot(true));
+		
+		SmartDashboard.putData("AUTO MODE", austinChooser);
+		GearIngestor.setArmOffSet();
 	}
 
 	
 	//true is red, false is blue
 	@Override
 	public void autonomousInit() {
-		new SideGear(false).start();
+		
 	}
 
 	/**
@@ -38,7 +50,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-
+		((AutoMode)austinChooser.getSelected()).start();
 	}
 
 	public void teleopInit() {
@@ -65,7 +77,7 @@ public class Robot extends IterativeRobot {
 //		} else {
 //			Shooter.setElevator(0);
 //		}
-		
+		SmartDashboard.putNumber("POV", TeleOperated.manip.getPOV());
 	}
 
 	/**
@@ -73,15 +85,36 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		Shooter.setShooterPower(TeleOperated.driver.getTriggers());
-		DriveTrain.breakMode(true);
-		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
-		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
-		System.out.println(Shooter.getSpeed());
+//		Shooter.setShooterPower(TeleOperated.driver.getTriggers());
+//		DriveTrain.breakMode(true);
+//		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
+//		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
+		System.out.println(GearIngestor.getArmPos());
+		if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
+			GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
+		} else if (TeleOperated.driver.getAButton()) {
+			GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
+			//.443 gear
+			//.703 max
+		} else {
+			GearIngestor.stopArm();
+		}
+		
+		if(TeleOperated.driver.getRightTriggerButton()) GearIngestor.rollerIngestCurrentLimiting();
+		else if(TeleOperated.driver.getLeftTriggerButton()) GearIngestor.setRollerBarPower(.5);
+		else GearIngestor.stopRoller();
+		
+		GearIngestor.setDoorOpen(TeleOperated.driver.getYButton());
 		
 	}
 	@Override
 	public void disabledPeriodic() {
 		if(TeleOperated.driver.getAButton()) DriveTrain.calibrateHyro();
+		TeleOperated.manip.setRightRumble(0);
+		TeleOperated.manip.setLeftRumble(0);
+		TeleOperated.driver.setRightRumble(0);
+		TeleOperated.driver.setLeftRumble(0);
+		//SmartDashboard.putData("AUTO MODE", austinChooser);
+		
 	}
 }
