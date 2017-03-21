@@ -1,19 +1,19 @@
 package org.usfirst.frc.team548.robot.AutoCommands;
 
-import javax.rmi.CORBA.Util;
-
+import org.usfirst.frc.team548.robot.Constants;
 import org.usfirst.frc.team548.robot.DriveTrain;
+import org.usfirst.frc.team548.robot.GearIngestor;
 import org.usfirst.frc.team548.robot.TopGear;
-import org.usfirst.frc.team548.robot.Utils;
 
-public class DriveDistance extends AutoCommandBase {
+public class DriveDistanceWithArm extends AutoCommandBase {
 
-	private double power, distance, threashold;
-	public DriveDistance(double timeOut, double power, double distance, double threshhold) {
+	private double power, distance, threashold, armPos;
+	public DriveDistanceWithArm(double timeOut, double power, double distance, double threshhold, double armPos) {
 		super(timeOut);
 		this.power = power;
 		this.distance = distance;
 		this.threashold = threshhold;
+		this.armPos = armPos;
 	}
 
 	@Override
@@ -25,6 +25,7 @@ public class DriveDistance extends AutoCommandBase {
 
 	@Override
 	protected void run() {
+		GearIngestor.setArmPos(armPos);
 		if(Math.abs(DriveTrain.averageDistance()) < distance) {
 			if(Math.abs(distance)- Math.abs(DriveTrain.averageDistance()) < threashold) DriveTrain.driveStraight(.3 * (Math.abs(power)/power)); 
 			else DriveTrain.driveStraight(power);
@@ -39,12 +40,13 @@ public class DriveDistance extends AutoCommandBase {
 	@Override
 	public void end() {
 		DriveTrain.stop();
+		GearIngestor.stopArm();
 	}
 
 	@Override
 	protected String getCommandName() {
 		// TODO Auto-generated method stub
-		return "Drive Straight Distance";
+		return "Drive Straight Distance With Arm";
 	}
-
+	
 }

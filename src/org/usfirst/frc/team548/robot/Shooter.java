@@ -36,7 +36,7 @@ private static Shooter instance;
 	}
 	
 	public static void setElevator(double p) {
-		elvevator.set(p);
+		elvevator.set(-p);
 	}
 	
 	public static void setShooterSpeed(double speed) {

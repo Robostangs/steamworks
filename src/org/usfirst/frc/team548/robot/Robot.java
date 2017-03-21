@@ -24,15 +24,18 @@ public class Robot extends IterativeRobot {
 		DriveTrain.getInstance();
 		Climber.getInstance();
 		//Ingestor.getInstance();
-		Shooter.getInstance();
-		TopGear.getInstance();
+		//Shooter.getInstance();
+		//TopGear.getInstance();
 		GearIngestor.getInstance();
 		TeleOperated.getInstance();
 		PDP = new PowerDistributionPanel();
 		
 		austinChooser = new SendableChooser<AutoMode>();
-		austinChooser.addDefault("Shoot Only", new OnlyShoot());
-		austinChooser.addObject("Middle Gear Then Shoot Red", new MiddleGearAndShoot(true));
+		//austinChooser.addDefault("Shoot Only", new OnlyShoot());
+		austinChooser.addDefault("Middle Gear", new MiddleGear());
+		austinChooser.addObject("Shoot Only", new OnlyShoot());
+		austinChooser.addObject("Red Side Gear", new SideGear(true));
+		austinChooser.addObject("Blue Side Gear", new SideGear(false));
 		
 		SmartDashboard.putData("AUTO MODE", austinChooser);
 		GearIngestor.setArmOffSet();
@@ -42,7 +45,7 @@ public class Robot extends IterativeRobot {
 	//true is red, false is blue
 	@Override
 	public void autonomousInit() {
-		
+		((AutoMode)austinChooser.getSelected()).start();
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		((AutoMode)austinChooser.getSelected()).start();
+		
 	}
 
 	public void teleopInit() {
@@ -77,7 +80,7 @@ public class Robot extends IterativeRobot {
 //		} else {
 //			Shooter.setElevator(0);
 //		}
-		SmartDashboard.putNumber("POV", TeleOperated.manip.getPOV());
+		SmartDashboard.putNumber("Arm pos", GearIngestor.getArmPos());
 	}
 
 	/**
@@ -89,22 +92,25 @@ public class Robot extends IterativeRobot {
 //		DriveTrain.breakMode(true);
 //		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
 //		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
-		System.out.println(GearIngestor.getArmPos());
-		if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
-			GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
-		} else if (TeleOperated.driver.getAButton()) {
-			GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
+		System.out.println(GearIngestor.getArmPos() + " "+GearIngestor.getAbsPos());
+		
+//		
+//		if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
+//			GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
+		if (TeleOperated.driver.getAButton()) {
+			GearIngestor.setArmPos(Constants.GEARING_MIN);
 			//.443 gear
 			//.703 max
+		}  else if(TeleOperated.driver.getBButton()) {
+			GearIngestor.setArmPos(Constants.GEARING_MAX);
 		} else {
 			GearIngestor.stopArm();
 		}
+//		
+//		if(TeleOperated.driver.getRightTriggerButton()) GearIngestor.rollerIngestCurrentLimiting();
+//		else if(TeleOperated.driver.getLeftTriggerButton()) GearIngestor.setRollerBarPower(.5);
+//		else GearIngestor.stopRoller();
 		
-		if(TeleOperated.driver.getRightTriggerButton()) GearIngestor.rollerIngestCurrentLimiting();
-		else if(TeleOperated.driver.getLeftTriggerButton()) GearIngestor.setRollerBarPower(.5);
-		else GearIngestor.stopRoller();
-		
-		GearIngestor.setDoorOpen(TeleOperated.driver.getYButton());
 		
 	}
 	@Override
@@ -114,6 +120,7 @@ public class Robot extends IterativeRobot {
 		TeleOperated.manip.setLeftRumble(0);
 		TeleOperated.driver.setRightRumble(0);
 		TeleOperated.driver.setLeftRumble(0);
+		//System.out.println(GearIngestor.getAbsPos());
 		//SmartDashboard.putData("AUTO MODE", austinChooser);
 		
 	}

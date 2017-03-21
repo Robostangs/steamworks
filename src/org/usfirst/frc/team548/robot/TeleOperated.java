@@ -65,7 +65,8 @@ public class TeleOperated {
 		/**
 		 * Manip
 		 */
-		Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
+		if(Math.abs(manip.getRightStickYAxis()) > .2) Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
+		else Climber.setPower(0);
 //		if(!manip.getLeftBumper()) {
 //			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
 //			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
@@ -73,29 +74,10 @@ public class TeleOperated {
 //			Ingestor.setElevatorPower(-.8);
 //			Ingestor.setRollerBarPower(-.8); 
 //		}
-			if(!manip.getAButton()) TopGear.setOpen(manip.getXButton());
+			//if(!manip.getAButton()) TopGear.setOpen(manip.getXButton());
 		
-			if(manip.getAButton()) {
-				if(!timerStart) {
-					timer.start();
-					timerStart = true;
-				}
-				
-					TopGear.setOpen(true);
-				
-				if(timer.get() > .3 && timer.get() < 1) {
-					Climber.setClimbOpen(true);
-				} else if(timer.get() > 1) {
-					Climber.setClimbOpen(false);
-				}
-				
-				//DriveTrain.drive(.3, .3);
-			} 
-			else{
-				
-				timerStart = false;
-				timer.reset();
-			}
+		TopGear.setOpen(manip.getAButton());   
+			
 		
 		if(manip.getLeftTriggerButton()) {
 			Shooter.injectAfterSpeed(2820);
@@ -111,13 +93,13 @@ public class TeleOperated {
 		
 		
 		//Gear Ingestor
-		if (!manip.getXButton()) {
+		if (!manip.getBButton()) {
 			//Roller
 			if (manip.getRightBumper()) {
 				manip.setLeftRumble(0);
 				driver.setLeftRumble(0);
 				GearIngestor.setRollerBarPower(.7d);
-			} else if (GearIngestor.getAbsPos() < Constants.GEARING_ZERO + 300) {
+			} else if (GearIngestor.getArmPos() < 300) {
 				GearIngestor.rollerIngestCurrentLimiting();
 				if (GearIngestor.isGearInIngestor()) {
 					manip.setLeftRumble(1);
@@ -140,10 +122,10 @@ public class TeleOperated {
 			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
 				GearIngestor.setArmPower(-manip.getLeftStickYAxis());
 			} else if (manip.getYButton()) {
-				GearIngestor.setArmPos(Constants.GEARING_MAX);
+				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
 			} else if (manip.getRightTriggerButton()) {
-				GearIngestor.setArmPower(-1);
-				// GearIngestor.setArmPos(Constants.GEARING_MIN+.02);
+				
+				 GearIngestor.setArmPos(Constants.GEARING_MIN);
 			} else if(manip.getStartButton()){
 				if(wiggle < 4){
 					GearIngestor.setArmPower(-.5);
@@ -195,7 +177,7 @@ public class TeleOperated {
 		
 		if(manip.getPOV() == 180) {
 			Climber.setClimbOpen(true);
-		} else if(manip.getPOV() == 90 ) {
+		} else if(manip.getPOV() == 0 ) {
 			Climber.setClimbOpen(false);
 		}
 		

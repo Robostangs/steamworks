@@ -12,7 +12,6 @@ public class GearIngestor {
 
 	private static GearIngestor instance;
 	private static CANTalon arm, roller;
-	private static Solenoid sol;
 	private static boolean currentLimiting = false, startedTimer = false;
 	private static Timer currentTimer;
 	
@@ -22,7 +21,6 @@ public class GearIngestor {
 	}
 	
 	private GearIngestor() {
-		sol = new Solenoid(Constants.GEARING_SOL_PORT);
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
@@ -30,13 +28,6 @@ public class GearIngestor {
 		currentTimer = new Timer();
 	}
 	
-	public static void setDoorOpen(boolean b) {
-		sol.set(b);
-	}
-	
-	public static boolean isOpen() {
-		return sol.get();
-	}
 	
 	public static void rollerIngestCurrentLimiting() {
 		if(!currentLimiting) {
@@ -47,7 +38,7 @@ public class GearIngestor {
 			} else if(Robot.PDP.getCurrent(5) < 10 && startedTimer) {
 				startedTimer = false;
 				currentTimer.stop();
-			} else if(currentTimer.get() > .4 && startedTimer) {
+			} else if(currentTimer.get() > .25 && startedTimer) {
 				currentLimiting = true;
 				startedTimer = false;
 				//roller.set(p*.25);
@@ -80,8 +71,11 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		if(power > 0&& getArmPos() > Constants.GEARING_MAX) arm.set(0);
-		else if(power < 0&& getArmPos() < Constants.GEARING_MIN) arm.set(0);
+		if(power > 0 && getArmPos() > Constants.GEARING_MAX) arm.set(0);
+		else if(power < 0 && getArmPos() < 0){
+			
+			arm.set(0);
+		}
 		else arm.set(power);
 	}
 	public static double getArmPos() {
@@ -101,7 +95,16 @@ public class GearIngestor {
 	}
 	
 	public static void setArmOffSet() {
-		setArmEncPos((int)((getAbsPos()-Constants.GEARING_ZERO)*4095));
+		setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
+		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+	}
+	
+	private static double locSub(double v, double c) {
+		if (v - c > 0) {
+			return v - c;
+		} else {
+			return (1 - c) + v;
+		}
 	}
 	
 }

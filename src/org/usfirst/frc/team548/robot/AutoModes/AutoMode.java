@@ -43,7 +43,11 @@ public abstract class AutoMode {
     }
     
     protected void driveDistance(double seconds, double power, double distance, double threshold, boolean gear) {
-        runCommand(new DriveDistance(seconds, power, distance, threshold, gear));
+        runCommand(new DriveDistance(seconds, power, distance, threshold));
+    }
+    
+    protected void driveDistanceWithArm(double seconds, double power, double distance, double threshold, double arm) {
+        runCommand(new DriveDistanceWithArm(seconds, power, distance, threshold, arm));
     }
     
     protected void openGear(double seconds, boolean open) {
@@ -63,6 +67,10 @@ public abstract class AutoMode {
      */
     protected void GearRFT(double sec) {
     	runCommand(new GearRFTCommand(sec));
+    }
+    
+    protected void GearIngestorExgeset(double sec) {
+    	runCommand(new ArmGearExgest(sec));
     }
     
     private static void runCommand(AutoCommandBase command) {
