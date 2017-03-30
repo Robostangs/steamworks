@@ -45,27 +45,27 @@ private static boolean yPressed = false;
 		} else {
 			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
 		}
-		if(manip.getStartButton()) {
-			if(!timerStart) {
-				timer.start();
-				timerStart = true;
-			}
-			
-				TopGear.setOpen(true);
-			
-			if(timer.get() > .3 && timer.get() < 1) {
-				Climber.setClimbOpen(true);
-			} else if(timer.get() > 1) {
-				Climber.setClimbOpen(false);
-			}
-			
-			//DriveTrain.drive(.3, .3);
-		} 
-		else{
-			
-			timerStart = false;
-			timer.reset();
-		}
+//		if(manip.getStartButton()) {
+//			if(!timerStart) {
+//				timer.start();
+//				timerStart = true;
+//			}
+//			
+//				TopGear.setOpen(true);
+//			
+//			if(timer.get() > .3 && timer.get() < 1) {
+//				Climber.setClimbOpen(true);
+//			} else if(timer.get() > 1) {
+//				Climber.setClimbOpen(false);
+//			}
+//			
+//			//DriveTrain.drive(.3, .3);
+//		} 
+//		else{
+//			
+//			timerStart = false;
+//			timer.reset();
+//		}
 		
 		
 		DriveTrain.shiftHigh(driver.getRightBumper());
@@ -73,53 +73,61 @@ private static boolean yPressed = false;
 		/**
 		 * Manip
 		 */
-		Climber.setPower((manip.getXButton())? -1 : (manip.getAButton())? -.5 : 0);
-//		if(!manip.getLeftBumper()) {
-//			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
-//			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
-//		} else {
-//			Ingestor.setElevatorPower(-.8);
-//			Ingestor.setRollerBarPower(-.8); 
-//		}
-		if(!manip.getStartButton()) {
-			TopGear.setOpen(manip.getBButton());
-		}
+		if(Math.abs(manip.getRightStickYAxis()) > .2) Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
+		else Climber.setPower(0);
 		
-		if(manip.getRightTriggerButton()) {
-			Shooter.injectAfterSpeed(2900);
-		} else {
-			if(manip.getRightBumper()) { 
-				Shooter.setElevator(-.8);
-				//Shooter.setShooterPower(-0.5);	
+		if (!manip.getBButton()) {
+			//Roller
+			if (manip.getRightBumper()) {
+				manip.setLeftRumble(0);
+				driver.setLeftRumble(0);
+				GearIngestor.setRollerBarPower(.7d);
+			} else if (GearIngestor.getArmPos() < 300) {
+				GearIngestor.rollerIngestCurrentLimiting();
+				if (GearIngestor.isGearInIngestor()) {
+					manip.setLeftRumble(1);
+					driver.setLeftRumble(1);
+				}
+			} else if (manip.getPOV() == 90) {
+				GearIngestor.rollerIngestCurrentLimiting();
+				if (GearIngestor.isGearInIngestor()) {
+					manip.setLeftRumble(1);
+					driver.setLeftRumble(1);
+				}
 			} else {
-				Shooter.setElevator(0);
+
+				manip.setLeftRumble(0);
+				driver.setLeftRumble(0);
+				GearIngestor.setRollerBarPower(0);
 			}
-			Shooter.setShooterPower(0);
+
+			// ARM
+			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
+				GearIngestor.setArmPower(-manip.getLeftStickYAxis());
+			} else if (manip.getYButton()) {
+				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
+			} else if (manip.getRightTriggerButton()) {
+				
+				 GearIngestor.setArmPos(Constants.GEARING_MIN);
+			} else if(manip.getStartButton()){
+				if(wiggle < 4){
+					GearIngestor.setArmPower(-.5);
+				}
+				else if(wiggle >= 4){
+					GearIngestor.setArmPower(.5);
+				}	
+				wiggle ++;
+				if (wiggle > 8) wiggle = 0;
+			} else {
+				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
+				/// GearIngestor.stopArm();
+			}
+		} else {
+			GearIngestor.setArmPos(0);//Go down
+			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
-		
-		if(manip.getPOV() == 0 && !povPressed) {
-			shooterAdjustment += .0005;
-			Shooter.addF(shooterAdjustment);
-			povPressed = true;
-		} else if (manip.getPOV() == 180 && !povPressed) {
-			shooterAdjustment -= .0005;
-			Shooter.addF(shooterAdjustment);
-			povPressed = true;
-		} else if(manip.getPOV() == -1) {
-			povPressed = false;
-		}
-		
-		if(manip.getYButton() && !yPressed) {
-			Climber.setClimbOpen(!Climber.isOpen());
-			yPressed = true;
-		} else if(yPressed && !manip.getYButton()) {
-			yPressed = false;
-		}
-		
-	
-		
-		//Ingestor.setRollerBarDown(manip.getBackButton());
-		/**
+		SmartDashboard.putNumber("Arm pos", GearIngestor.getArmPos());
+		/*
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
 		 */
 //		if(driver.getBButton()) DriveTrain.restHyro();
@@ -130,15 +138,15 @@ private static boolean yPressed = false;
 		
 		
 		//SmartDashboard stuff
-		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
-		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
-		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
-		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
+//		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
+//		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
+//		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
+//		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
 		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
-		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
-		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
-//		/**
+//		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
+//		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
+////		/**
 //		 * JAREDS CRAP BELOW
 //		 */
 //		

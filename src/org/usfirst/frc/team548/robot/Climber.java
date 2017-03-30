@@ -12,16 +12,18 @@ public class Climber {
 		return instance;
 	}
 	
-	private static CANTalon climbTalon;
+	private static CANTalon climbTalon1, climbTalon2;
 	private static Solenoid sol;
 	
 	private Climber() {
-		climbTalon = new CANTalon(Constants.CLIMB_TALONID_CLIMBTALON);
+		climbTalon1 = new CANTalon(Constants.CLIMB_TALONID_CLIMBTALON1);
+		climbTalon2 = new CANTalon(Constants.CLIMB_TALONID_CLIMBTALON2);
 		sol = new Solenoid(Constants.CLIMB_SOL_PORT);
 	}
 	
 	public static void setPower(double power) {
-		climbTalon.set(power);
+		climbTalon1.set(power);
+		climbTalon2.set(power);
 	}
 	
 	public static void setClimbOpen(boolean b) {

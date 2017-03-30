@@ -12,7 +12,6 @@ public class GearIngestor {
 
 	private static GearIngestor instance;
 	private static CANTalon arm, roller;
-	private static Solenoid sol;
 	private static boolean currentLimiting = false, startedTimer = false;
 	private static Timer currentTimer;
 	
@@ -22,51 +21,46 @@ public class GearIngestor {
 	}
 	
 	private GearIngestor() {
-		sol = new Solenoid(Constants.GEARING_SOL_PORT);
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
-		arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
 	}
 	
-	public static void setDoorOpen(boolean b) {
-		sol.set(b);
-	}
-	
-	public static boolean isOpen() {
-		return sol.get();
-	}
 	
 	public static void rollerIngestCurrentLimiting() {
-		
 		if(!currentLimiting) {
-			if(!startedTimer && Robot.PDP.getCurrent(11) > 10) {
+			if(!startedTimer && Robot.PDP.getCurrent(9) > 15) {
 				startedTimer = true;
 				currentTimer.reset();
 				currentTimer.start();
-			} else if(Robot.PDP.getCurrent(11) < 10 && startedTimer) {
+			} else if(Robot.PDP.getCurrent(9) < 15 && startedTimer) {
 				startedTimer = false;
 				currentTimer.stop();
-			} else if(currentTimer.get() > .4 && startedTimer) {
+			} else if(currentTimer.get() > .25 && startedTimer) {
 				currentLimiting = true;
 				startedTimer = false;
 				//roller.set(p*.25);
 			} 
-			roller.set(-.4);
+			roller.set(.7);
 		} else {
-			roller.set(-.25);
-			if(Robot.PDP.getCurrent(11) < 4) currentLimiting = false;
+			roller.set(.25);
+			if(Robot.PDP.getCurrent(9) < 1) currentLimiting = false;
 		}
 	}
 	
 	public static void setRollerBarPower(double p) {
-		roller.set(p);
+		roller.set(-p);
 	}
 	
-	public static void stop() {
+	public static void stopRoller() {
 		setRollerBarPower(0);
 		
+	}
+	
+	public static void stopArm() {
+		setArmPower(0);
 	}
 	
 	
@@ -77,11 +71,40 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		arm.set(0);
+		if(power > 0 && getArmPos() > Constants.GEARING_MAX) arm.set(0);
+		else if(power < 0 && getArmPos() < 0){
+			
+			arm.set(0);
+		}
+		else arm.set(power);
 	}
 	public static double getArmPos() {
-		return arm.getPosition();
+		return arm.getEncPosition();
 	}
 	
+	public static double getAbsPos() {
+		return (arm.getPulseWidthPosition() & 0xFFF)/4095d;
+	}
+	
+	public static boolean isGearInIngestor() {
+		return currentLimiting;
+	}
+	
+	public static void setArmEncPos(int pos) {
+		arm.setEncPosition(pos);
+	}
+	
+	public static void setArmOffSet() {
+		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
+		setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+	}
+	
+	private static double locSub(double v, double c) {
+		if (v - c > 0) {
+			return v - c;
+		} else {
+			return (1 - c) + v;
+		}
+	}
 	
 }

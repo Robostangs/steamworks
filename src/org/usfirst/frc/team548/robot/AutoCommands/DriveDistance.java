@@ -27,7 +27,7 @@ public class DriveDistance extends AutoCommandBase {
 
 	@Override
 	protected void run() {
-		TopGear.setOpen(gearOpen);
+		//TopGear.setOpen(gearOpen);
 		if(Math.abs(DriveTrain.averageDistance()) < distance) {
 			if(Math.abs(distance)- Math.abs(DriveTrain.averageDistance()) < threashold) DriveTrain.driveStraight(.3 * (Math.abs(power)/power)); 
 			else DriveTrain.driveStraight(power);

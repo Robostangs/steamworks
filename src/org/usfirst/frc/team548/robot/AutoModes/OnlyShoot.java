@@ -10,7 +10,10 @@ public class OnlyShoot extends AutoMode {
 
 	@Override
 	protected void run() {
-		shootAtSpeed(12, Constants.SHOOT_AUTON_SPEED);
+		//shootAtSpeed(12, Constants.SHOOT_AUTON_SPEED);
+		//Blue.... Make pos to do red
+		wideTurn(.2, -.5, -.1);
+		driveInTime(1, -.9);
 	}
 
 }
