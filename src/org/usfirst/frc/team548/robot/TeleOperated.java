@@ -76,20 +76,20 @@ public class TeleOperated {
 //		}
 			//if(!manip.getAButton()) TopGear.setOpen(manip.getXButton());
 		
-		TopGear.setOpen(manip.getAButton());   
+		//TopGear.setOpen(manip.getAButton());   
 			
 		
-		if(manip.getLeftTriggerButton()) {
-			Shooter.injectAfterSpeed(2820);
-		} else {
-			if(manip.getLeftBumper()) { 
-				Shooter.setElevator(-.8);
-				//Shooter.setShooterPower(-0.5);	
-			} else {
-				Shooter.setElevator(0);
-			}
-			Shooter.setShooterPower(0);
-		}
+//		if(manip.getLeftTriggerButton()) {
+//			Shooter.injectAfterSpeed(2820);
+//		} else {
+//			if(manip.getLeftBumper()) { 
+//				Shooter.setElevator(-.8);
+//				//Shooter.setShooterPower(-0.5);	
+//			} else {
+//				Shooter.setElevator(0);
+//			}
+//			Shooter.setShooterPower(0);
+//		}
 		
 		
 		//Gear Ingestor
@@ -197,15 +197,15 @@ public class TeleOperated {
 		
 		
 		//SmartDashboard stuff
-		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
-		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
-		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
-		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
-		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
-		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
-		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
-		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
-		SmartDashboard.putBoolean("Ready for takeoff", Climber.isOpen());
+//		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
+//		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
+//		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
+//		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
+//		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
+//		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
+//		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
+//		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
+//		SmartDashboard.putBoolean("Ready for takeoff", Climber.isOpen());
 	}
 
 	public static void init() {
