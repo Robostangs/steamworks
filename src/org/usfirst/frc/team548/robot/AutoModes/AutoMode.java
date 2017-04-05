@@ -62,6 +62,14 @@ public abstract class AutoMode {
         command.execute();
     }
     
+    protected void GearIngestorExgeset(double sec) {
+    	runCommand(new ArmGearExgest(sec));
+    }
+    
+    protected void driveDistanceWithArm(double seconds, double power, double distance, double threshold, double arm) {
+        runCommand(new DriveDistanceWithArm(seconds, power, distance, threshold, arm));
+    }
+    
     public String getName() {
     	return this.autoName;
     }
