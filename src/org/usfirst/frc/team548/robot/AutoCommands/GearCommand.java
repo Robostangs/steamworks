@@ -1,6 +1,5 @@
 package org.usfirst.frc.team548.robot.AutoCommands;
 
-import org.usfirst.frc.team548.robot.TopGear;
 
 public class GearCommand extends AutoCommandBase {
 	
@@ -13,14 +12,14 @@ public class GearCommand extends AutoCommandBase {
 
 	@Override
 	public void init() {
-		TopGear.setOpen(open);
+		//TopGear.setOpen(open);
 
 	}
 
 	@Override
 	protected void run() {
 		// TODO Auto-generated method stub
-		TopGear.setOpen(open);
+		//TopGear.setOpen(open);
 	}
 
 	@Override

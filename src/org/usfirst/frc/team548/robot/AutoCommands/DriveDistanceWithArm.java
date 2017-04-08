@@ -3,7 +3,6 @@ package org.usfirst.frc.team548.robot.AutoCommands;
 import org.usfirst.frc.team548.robot.Constants;
 import org.usfirst.frc.team548.robot.DriveTrain;
 import org.usfirst.frc.team548.robot.GearIngestor;
-import org.usfirst.frc.team548.robot.TopGear;
 
 public class DriveDistanceWithArm extends AutoCommandBase {
 

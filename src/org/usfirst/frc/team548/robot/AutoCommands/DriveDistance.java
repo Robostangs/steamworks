@@ -1,9 +1,7 @@
 package org.usfirst.frc.team548.robot.AutoCommands;
 
-import javax.rmi.CORBA.Util;
 
 import org.usfirst.frc.team548.robot.DriveTrain;
-import org.usfirst.frc.team548.robot.TopGear;
 import org.usfirst.frc.team548.robot.Utils;
 
 public class DriveDistance extends AutoCommandBase {

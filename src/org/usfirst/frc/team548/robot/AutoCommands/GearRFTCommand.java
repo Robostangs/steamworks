@@ -3,7 +3,6 @@ package org.usfirst.frc.team548.robot.AutoCommands;
 import org.usfirst.frc.team548.robot.Climber;
 import org.usfirst.frc.team548.robot.Constants;
 import org.usfirst.frc.team548.robot.DriveTrain;
-import org.usfirst.frc.team548.robot.TopGear;
 
 public class GearRFTCommand extends AutoCommandBase {
 
@@ -40,7 +39,7 @@ public class GearRFTCommand extends AutoCommandBase {
 		}
 		
 		
-		TopGear.setOpen(true);
+		//TopGear.setOpen(true);
 	}
 
 	@Override

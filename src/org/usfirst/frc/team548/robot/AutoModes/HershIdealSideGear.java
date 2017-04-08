@@ -2,11 +2,12 @@ package org.usfirst.frc.team548.robot.AutoModes;
 
 import org.usfirst.frc.team548.robot.Constants;
 
-public class SideGear extends AutoMode {
+public class HershIdealSideGear extends AutoMode {
+
 private boolean isRed;
 	
-	public SideGear(boolean isRed) {
-		super("Side Gear");
+	public HershIdealSideGear(boolean isRed) {
+		super("Hersh Ideal Side Gear");
 		this.isRed = isRed;
 		
 		// TODO Auto-generated constructor stub
@@ -22,9 +23,21 @@ private boolean isRed;
 		GearIngestorExgeset(.7);
 		//GearRTFCommand(1.55); //Open gear
 		//openGear(1, true);
-		driveDistanceWithArm(1.5, -.3, 1.5, .25, Constants.GEARING_MIN); //back away from gear thing
+		driveDistanceWithArm(2, -.3, 2, .25, Constants.GEARING_PEGHEIGHT); //back away from gear thing
+		//what was added
+		if(isRed)turnToAngleInTime(1, 55, false);
+		else turnToAngleInTime(1, -55, false);
+		
+		//if(isRed)driveDistance(2, .8, 7, 1.0, false);
+		//else 
+		driveDistance(10, .9, 21.00, 2, false);
+		
+		
+		//if(isRed)turnToAngleInTime(.5, -45, false);
+		//if(isRed)driveDistance(100, .9, 21.00, 2.00, false);
+		
+		
 		// TODO Auto-generated method stub
 
 	}
-
 }

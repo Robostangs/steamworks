@@ -33,12 +33,20 @@ public class Robot extends IterativeRobot {
 		austinChooser = new SendableChooser<AutoMode>();
 		//austinChooser.addDefault("Shoot Only", new OnlyShoot());
 		austinChooser.addDefault("Middle Gear", new MiddleGear());
-		austinChooser.addObject("Shoot Only", new OnlyShoot());
-		austinChooser.addObject("Red Side Gear", new SideGear(true));
-		austinChooser.addObject("Blue Side Gear", new SideGear(false));
+	//	austinChooser.addObject("Shoot Only", new OnlyShoot());
+		austinChooser.addObject("Red Side Gear no driving", new SideGear(true));
+		austinChooser.addObject("Blue Side Gear  no driving", new SideGear(false));
+	//  austinChooser.addObject("Red Side Gear with driving", new HershIdealSideGear(true));
+	//	austinChooser.addObject("Blue side gear with driving", new HershIdealSideGear(false));
+		austinChooser.addObject("Middle gear with driving", new HershIdealMiddleGear());
+		austinChooser. addObject("Red right", new SideGearRightSideRed());
+		austinChooser.addObject("Blue right", new SideGearRightSideBlue());
+		austinChooser.addObject("Red left", new SideGearLeftSideRed());
+		austinChooser.addObject("Blue left", new SideGearLeftSideBlue());
 		
 		SmartDashboard.putData("AUTO MODE", austinChooser);
 		GearIngestor.setArmOffSet();
+		USBLED.getInstance();
 	}
 
 	
@@ -104,7 +112,12 @@ public class Robot extends IterativeRobot {
 		}  else if(TeleOperated.driver.getBButton()) {
 			GearIngestor.setArmPos(Constants.GEARING_MAX);
 		} else {
-			GearIngestor.stopArm();
+			if(Math.abs(TeleOperated.driver.getRightStickYAxis()) > .2) {
+				GearIngestor.setArmPower(TeleOperated.driver.getRightStickYAxis());
+			} else {
+				GearIngestor.stopArm();
+			}
+			
 		}
 //		
 //		if(TeleOperated.driver.getRightTriggerButton()) GearIngestor.rollerIngestCurrentLimiting();

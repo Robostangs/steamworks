@@ -24,6 +24,7 @@ public class GearIngestor {
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
+		arm.setPID(7, 0.001, 0);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
 	}
@@ -31,7 +32,7 @@ public class GearIngestor {
 	
 	public static void rollerIngestCurrentLimiting() {
 		if(!currentLimiting) {
-			if(!startedTimer && Robot.PDP.getCurrent(5) > 10) {
+			if(!startedTimer && Robot.PDP.getCurrent(5) > 15) {
 				startedTimer = true;
 				currentTimer.reset();
 				currentTimer.start();
@@ -71,12 +72,7 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		if(power > 0 && getArmPos() > Constants.GEARING_MAX) arm.set(0);
-		else if(power < 0 && getArmPos() < 0){
-			
-			arm.set(0);
-		}
-		else arm.set(power);
+		 arm.set(power);
 	}
 	public static double getArmPos() {
 		return arm.getEncPosition();

@@ -19,10 +19,11 @@ public class TeleOperated {
 
 	public static XBoxController driver;
 	public static XBoxController manip;
-	private static boolean povPressed = false, timerStart = false;
+	private static boolean povPressed = false, timerStart = false, gearArmOffsetPress = false;
+	
 
 	//private static double shooterAdjustment = 0;
-
+	private static double gearOffset = 0;
 	private TeleOperated() {
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
 		manip = new XBoxController(Constants.XB_POS_MANIP);
@@ -67,29 +68,7 @@ public class TeleOperated {
 		 */
 		if(Math.abs(manip.getRightStickYAxis()) > .2) Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
 		else Climber.setPower(0);
-//		if(!manip.getLeftBumper()) {
-//			Ingestor.setElevatorPower(manip.getLeftTriggerAxis());
-//			Ingestor.setRollerBarPower(manip.getLeftTriggerAxis()*.8); 
-//		} else {
-//			Ingestor.setElevatorPower(-.8);
-//			Ingestor.setRollerBarPower(-.8); 
-//		}
-			//if(!manip.getAButton()) TopGear.setOpen(manip.getXButton());
-		
-		//TopGear.setOpen(manip.getAButton());   
-			
-		
-//		if(manip.getLeftTriggerButton()) {
-//			Shooter.injectAfterSpeed(2820);
-//		} else {
-//			if(manip.getLeftBumper()) { 
-//				Shooter.setElevator(-.8);
-//				//Shooter.setShooterPower(-0.5);	
-//			} else {
-//				Shooter.setElevator(0);
-//			}
-//			Shooter.setShooterPower(0);
-//		}
+
 		
 		
 		//Gear Ingestor
@@ -104,6 +83,9 @@ public class TeleOperated {
 				if (GearIngestor.isGearInIngestor()) {
 					manip.setLeftRumble(1);
 					driver.setLeftRumble(1);
+				} else {
+					manip.setLeftRumble(0);
+					driver.setLeftRumble(0);
 				}
 			} else if (manip.getPOV() == 90) {
 				GearIngestor.rollerIngestCurrentLimiting();
@@ -120,23 +102,23 @@ public class TeleOperated {
 
 			// ARM
 			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
-				GearIngestor.setArmPower(-manip.getLeftStickYAxis());
+				GearIngestor.setArmPower(-manip.getLeftStickYAxis()*.25);
 			} else if (manip.getYButton()) {
 				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
 			} else if (manip.getRightTriggerButton()) {
 				
 				 GearIngestor.setArmPos(Constants.GEARING_MIN);
 			} else if(manip.getStartButton()){
-				if(wiggle < 4){
+				if(wiggle < 3){
 					GearIngestor.setArmPower(-.5);
 				}
-				else if(wiggle >= 4){
+				else if(wiggle >= 3){
 					GearIngestor.setArmPower(.5);
 				}	
 				wiggle ++;
-				if (wiggle > 8) wiggle = 0;
+				if (wiggle > 6) wiggle = 0;
 			} else {
-				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
+				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT+gearOffset);
 				/// GearIngestor.stopArm();
 			}
 		} else {
@@ -144,36 +126,9 @@ public class TeleOperated {
 			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
 		
-		//GearIngestor.setDoorOpen(manip.getPOV() == 90);
-		//POV CRAP
-//		if(manip.getPOV() == 0 && !povPressed) {
-//			shooterAdjustment += .0005;
-//			Shooter.addF(shooterAdjustment);
-//			povPressed = true;
-//		} else if (manip.getPOV() == 180 && !povPressed) {
-//			shooterAdjustment -= .0005;
-//			Shooter.addF(shooterAdjustment);
-//			povPressed = true;
-//		} else if(manip.getPOV() == -1) {
-//			povPressed = false;
-//		}
-		
-		
-//		if(manip.getYButton()) {
-//			Climber.setClimbOpen(true);
-//		} else if(manip.getAButton()) {
-//			Climber.setClimbOpen(false);
-//		}
-//		if(manip.getYButton() && !yPressed) {
-//			Climber.setClimbOpen(!Climber.isOpen());
-//			yPressed = true;
-//		} else if(yPressed && !manip.getYButton()) {
-//			yPressed = false;
-//		}
-		
 		if(Climber.isOpen()) manip.setRightRumble(1);
 		else manip.setRightRumble(0);
-//		
+	
 		
 		if(manip.getPOV() == 180) {
 			Climber.setClimbOpen(true);
@@ -181,10 +136,29 @@ public class TeleOperated {
 			Climber.setClimbOpen(false);
 		}
 		
+		if(manip.getBackButton()) gearOffset = 0;
 		
 		
 	
-
+		if(!gearArmOffsetPress && manip.getLeftTriggerButton()) {
+			gearOffset-=20;
+			gearArmOffsetPress = true;
+		} else if(!gearArmOffsetPress && manip.getLeftBumper()) {
+			gearOffset+=20;
+			gearArmOffsetPress = true;
+		} else {
+			gearArmOffsetPress = false;
+		}
+		
+		/**
+		 * LEDS
+		 */
+		USBLED.isHasGear(GearIngestor.isGearInIngestor());
+		USBLED.isRftOut(Climber.isOpen());
+		USBLED.isWantGear(GearIngestor.getArmPos() < 300);
+		USBLED.isWombo(manip.getAButton());
+		
+		
 		//Ingestor.setRollerBarDown(!manip.getBackButton());
 		/**
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP
