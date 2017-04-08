@@ -91,8 +91,8 @@ public class GearIngestor {
 	}
 	
 	public static void setArmOffSet() {
-		setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
-		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
+		setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
 	}
 	
 	private static double locSub(double v, double c) {

@@ -7,7 +7,7 @@ public class SideGearRightSideBlue extends AutoMode {
 private boolean isRed;
 	
 	public SideGearRightSideBlue() {
-		super("Side geear right side blue");
+		super("Side gear right side blue");
 	//	this.isRed = isRed;
 		
 		// TODO Auto-generated constructor stub

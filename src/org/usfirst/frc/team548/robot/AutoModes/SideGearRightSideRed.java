@@ -22,7 +22,7 @@ private boolean isRed;
 		//what was added
 		turnToAngleInTime(1, 55, false);
 		driveDistance(2, .8, 7, 1.0, false);
-		turnToAngleInTime(.5, -45, false);
+		turnToAngleInTime(.5, -40, false);
 		driveDistance(100, .9, 21.00, 2.00, false);
 	}
 }

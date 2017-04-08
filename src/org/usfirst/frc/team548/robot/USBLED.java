@@ -19,22 +19,22 @@ public class USBLED {
 			serial = new SerialPort(9600, SerialPort.Port.kUSB1);
 		} catch (Exception e) {
 			System.out.println("RIP LEDS");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		status = 0;
 		statusBools = new boolean[8];
-		new Thread(new Runnable() {
-			public void run() {
-				while (true) {
-					sync();
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						//e.printStackTrace();
-					}
-				}
-			}
-		}).start();
+//		new Thread(new Runnable() {
+//			public void run() {
+//				while (true) {
+//					sync();
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}).start();
 	}
 
 	public static USBLED getInstance() {
@@ -57,11 +57,11 @@ public class USBLED {
 			for (int i = 0; i < 10; i++)
 				serial.write(new byte[] { status }, 1);
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			try {
 				serial = new SerialPort(9600, SerialPort.Port.kUSB1);
 			} catch (Exception ex) {
-				//ex.printStackTrace();
+				ex.printStackTrace();
 			}
 			//e.printStackTrace();
 		}
