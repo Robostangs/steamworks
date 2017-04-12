@@ -40,7 +40,8 @@ private static int wiggle = 0;
 			wiggle ++;
 			if (wiggle > 8) wiggle = 0;
 		} else {
-			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+			//DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
+			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Math.pow(driver.getLeftStickXAxis(), 3));
 		}
 		//When hersh ins't here
 //		if (!driver.getLeftTriggerButton()) {

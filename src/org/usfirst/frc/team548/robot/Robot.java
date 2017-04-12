@@ -71,9 +71,12 @@ public class Robot extends IterativeRobot {
 		// Shooter.setElevator(0);
 		// }
 		// SoundServer.setBoolData1(Climber.isOpen());
-		SmartDashboard.putNumber("Distance", dis.getAverageValue() * .002314d + 1.976);
+		//SmartDashboard.putNumber("Distance", dis.getAverageValue() * .002314d + 1.976);
+		SmartDashboard.putData("HYRO", DriveTrain.hyro);
 	}
 
+	boolean testStarted = false;
+	int currentTest = 0;
 	/**
 	 * This function is called periodically during test mode
 	 */
@@ -92,16 +95,22 @@ public class Robot extends IterativeRobot {
 		//
 		// if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
 		// GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
-		if (TeleOperated.driver.getAButton()) {
-			GearIngestor.setArmPos(Constants.GEARING_MIN);
-			// .443 gear
-			// .703 max
-		} else if (TeleOperated.driver.getBButton()) {
-			GearIngestor.setArmPos(Constants.GEARING_MAX);
+		if (!testStarted) {
+			if (TeleOperated.driver.getAButton()) {
+				GearIngestor.setArmPos(Constants.GEARING_MIN);
+				// .443 gear
+				// .703 max
+			} else if (TeleOperated.driver.getBButton()) {
+				GearIngestor.setArmPos(Constants.GEARING_MAX);
+			} else {
+				GearIngestor.stopArm();
+			}
 		} else {
-			GearIngestor.stopArm();
+			
 		}
 	}
+	
+	
 
 	public void disabledPeriodic() {
 		// SoundServer.setBoolData1(false);
@@ -110,5 +119,8 @@ public class Robot extends IterativeRobot {
 			DriveTrain.restHyro();
 		if (TeleOperated.driver.getBButton())
 			DriveTrain.calibrateHyro();
+		
+		testStarted = false;
+		currentTest = 0;
 	}
 }
