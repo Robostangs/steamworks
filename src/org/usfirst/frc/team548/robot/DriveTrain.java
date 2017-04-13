@@ -2,12 +2,14 @@ package org.usfirst.frc.team548.robot;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class DriveTrain implements PIDOutput {
 	private static DriveTrain instance;
@@ -20,7 +22,8 @@ public class DriveTrain implements PIDOutput {
 
 	private static CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
 	private static Solenoid shifter;
-	private static ADIS16448_IMU hyro;
+	//private static ADIS16448_IMU hyro;
+	public static AHRS hyro;
 	private static AnalogInput pressure;
 	private static PIDController pid;
 
@@ -35,7 +38,8 @@ public class DriveTrain implements PIDOutput {
 
 		leftFront.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		hyro = new ADIS16448_IMU();
+		//hyro = new ADIS16448_IMU();
+		hyro = new AHRS(SerialPort.Port.kUSB);
 		pressure = new AnalogInput(0);
 		pid = new PIDController(0.017d, 0, 0, hyro, this);
 		LiveWindow.addActuator("Turning", "pid", pid);
@@ -73,7 +77,7 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static double getAngle() {
-		return hyro.getAngleZ();
+		return hyro.getAngle();
 	}
 
 	public static void restHyro() {
@@ -81,7 +85,7 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static void calibrateHyro() {
-		hyro.calibrate();
+		//hyro.calibrate();
 	}
 	
 	public static void moveDistance(double distance, double power, double threshold){

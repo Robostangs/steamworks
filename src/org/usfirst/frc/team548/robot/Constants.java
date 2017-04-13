@@ -38,7 +38,7 @@ public class Constants {
 	
 	//Gear Ingestor
 	public static final int GEARING_TALONID_ARM = 2;
-	public static final int GEARING_TALONID_ROLLER = 12;
+	public static final int GEARING_TALONID_ROLLER = 11;
 	
 	public static final double GEARING_MAX = 2411;
 	public static final double GEARING_MIN = 0;

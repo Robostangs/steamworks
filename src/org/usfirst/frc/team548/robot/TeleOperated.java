@@ -166,12 +166,13 @@ public class TeleOperated {
 //		if(driver.getBButton()) DriveTrain.restHyro();
 //		else if(driver.getYButton()) DriveTrain.calibrateHyro();
 //		else if(driver.getXButton()) DriveTrain.restEncoders();
+		SmartDashboard.putData("HYRO", DriveTrain.hyro);
 		
-		
+		if(driver.getAButton()) DriveTrain.restHyro();
 		
 		
 		//SmartDashboard stuff
-//		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
+		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
 //		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
 //		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
 //		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  

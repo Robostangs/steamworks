@@ -72,7 +72,7 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		 arm.set(power);
+		arm.set(power);
 	}
 	public static double getArmPos() {
 		return arm.getEncPosition();
