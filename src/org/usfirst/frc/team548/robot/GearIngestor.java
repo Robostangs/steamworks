@@ -24,6 +24,7 @@ public class GearIngestor {
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
+		//arm.reverseOutput(true);
 		arm.setPID(7, 0.001, 0);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
@@ -32,11 +33,11 @@ public class GearIngestor {
 	
 	public static void rollerIngestCurrentLimiting() {
 		if(!currentLimiting) {
-			if(!startedTimer && Robot.PDP.getCurrent(5) > 15) {
+			if(!startedTimer && Robot.PDP.getCurrent(4) > 15) {
 				startedTimer = true;
 				currentTimer.reset();
 				currentTimer.start();
-			} else if(Robot.PDP.getCurrent(5) < 10 && startedTimer) {
+			} else if(Robot.PDP.getCurrent(4) < 10 && startedTimer) {
 				startedTimer = false;
 				currentTimer.stop();
 			} else if(currentTimer.get() > .25 && startedTimer) {
@@ -47,7 +48,7 @@ public class GearIngestor {
 			roller.set(-.7);
 		} else {
 			roller.set(-.25);
-			if(Robot.PDP.getCurrent(5) < 1) currentLimiting = false;
+			if(Robot.PDP.getCurrent(4) < 1) currentLimiting = false;
 		}
 	}
 	
@@ -91,8 +92,8 @@ public class GearIngestor {
 	}
 	
 	public static void setArmOffSet() {
-		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
-		setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+		setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
+		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
 	}
 	
 	private static double locSub(double v, double c) {
@@ -102,5 +103,13 @@ public class GearIngestor {
 			return (1 - c) + v;
 		}
 	}
+	
+	
+	
+	
+	//drive up slowly
+	//set as hard stop top
+	//hard stop top minus a number
+	//
 	
 }

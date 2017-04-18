@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
 		DriveTrain.getInstance();
 		Climber.getInstance();
 		//Ingestor.getInstance();
-		//Shooter.getInstance();
+		Shooter.getInstance();
 		//TopGear.getInstance();
 		GearIngestor.getInstance();
 		TeleOperated.getInstance();
@@ -43,6 +43,8 @@ public class Robot extends IterativeRobot {
 		austinChooser.addObject("Blue right", new SideGearRightSideBlue());
 		austinChooser.addObject("Red left", new SideGearLeftSideRed());
 		austinChooser.addObject("Blue left", new SideGearLeftSideBlue());
+		austinChooser.addObject("side gear blue and shoot", new SideGearShoot(false));
+		austinChooser.addObject("side gear red and shoot", new SideGearShoot(true));
 		
 		SmartDashboard.putData("AUTO MODE", austinChooser);
 		GearIngestor.setArmOffSet();
@@ -109,6 +111,7 @@ public class Robot extends IterativeRobot {
 			GearIngestor.setArmPos(Constants.GEARING_MIN);
 			//.443 gear
 			//.703 max
+			//GearIngestor.setArmPower(-.3);
 		}  else if(TeleOperated.driver.getBButton()) {
 			GearIngestor.setArmPos(Constants.GEARING_MAX);
 		} else {

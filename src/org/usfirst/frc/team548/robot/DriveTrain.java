@@ -39,7 +39,7 @@ public class DriveTrain implements PIDOutput {
 		leftFront.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		//hyro = new ADIS16448_IMU();
-		hyro = new AHRS(SerialPort.Port.kUSB);
+		hyro = new AHRS(SerialPort.Port.kMXP);
 		pressure = new AnalogInput(0);
 		pid = new PIDController(0.017d, 0, 0, hyro, this);
 		LiveWindow.addActuator("Turning", "pid", pid);
@@ -167,17 +167,17 @@ public class DriveTrain implements PIDOutput {
 	public static void driveStraight(double power) {
 		if (power > 0) {
 			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * .8, power * 1.2);
+				drive(power * .85, power * 1.15);
 			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * 1.2, power * .8);
+				drive(power * 1.15, power * .85);
 			} else {
 				drive(power, power);
 			}
 		} else {
 			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * 1.2, power * .8);
+				drive(power * 1.15, power * .85);
 			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * .8, power * 1.2);
+				drive(power * .85, power * 1.15);
 			} else {
 				drive(power, power);
 			}

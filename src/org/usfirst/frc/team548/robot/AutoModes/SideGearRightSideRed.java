@@ -14,7 +14,7 @@ private boolean isRed;
 
 	@Override
 	protected void run() {
-		driveDistanceWithArm(2.3, .9, 7.2, 1.5, Constants.GEARING_PEGHEIGHT);
+		driveDistanceWithArm(2.3, .9, Constants.AUTO_SIDE_DRIVE_DISTANCE, 1.5, Constants.GEARING_PEGHEIGHT);
 		turnToAngleInTime(2, -57, false); //turn to gear spring (-) is red
 		driveDistanceWithArm(1.5, .5, 1.5, .25,  Constants.GEARING_PEGHEIGHT); //drive toward gear spring
 		GearIngestorExgeset(.7);

@@ -24,8 +24,14 @@ public class TestAuto extends AutoMode {
 //		driveDistance(2.0, -.5, 5.0, 1);
 		//turnToAngleInTime()
 		
-		driveDistance(3, -.9, 7.7, 1.5, false);
-		turnToAngleInTime(3, -62, false);
+//		driveDistance(3, -.9, 7.7, 1.5, false);
+// 		turnToAngleInTime(3, -62, false);
+		
+		driveDistanceWithArm(2, .6, 5.925, 2, Constants.GEARING_PEGHEIGHT);
+		GearIngestorExgeset(.7);
+		turnToAngleInTime(.5, -90, false);
+		driveDistance(2.5, .7, 11.7, .5, false);
+		shootAtSpeed(15, Constants.SHOOT_AUTON_SPEED);
 		
 	}
 

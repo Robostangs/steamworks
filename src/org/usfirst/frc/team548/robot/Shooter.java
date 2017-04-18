@@ -13,14 +13,14 @@ private static Shooter instance;
 		return instance;
 	}
 	
-	private static CANTalon talonLeft, talonRight, elvevator;
+	private static CANTalon talonLeft, talonRight, elvevator, conv;
 	
 	private Shooter() {
 		talonLeft = new CANTalon(Constants.SHOOT_TALONID_TALONLEFT); //Encoder
 		talonRight = new CANTalon(Constants.SHOOT_TALONID_TALONRIGHT);
 		talonLeft.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		talonLeft.setPID(Constants.SHOOT_PID_P, Constants.SHOOT_PID_I, Constants.SHOOT_PID_D, Constants.SHOOT_PID_F, Constants.SHOOT_PID_IZONE, 0, 0);
-		
+		conv = new CANTalon(Constants.SHOOT_TALONID_TALONCONVA);
 		talonRight.changeControlMode(TalonControlMode.Follower);
 		//talonRight.reverseSensor(true);
 		talonRight.set(talonLeft.getDeviceID());
@@ -36,7 +36,7 @@ private static Shooter instance;
 	}
 	
 	public static void setElevator(double p) {
-		elvevator.set(-p);
+		elvevator.set(p);
 	}
 	
 	public static void setShooterSpeed(double speed) {
@@ -46,6 +46,12 @@ private static Shooter instance;
 	
 	public static void stop() {
 		setShooterPower(0);
+		setConvPower(0);
+		setElevator(0);
+	}
+	
+	public static void setConvPower(double p) {
+		conv.set(-p);
 	}
 	
 	public static double getSpeed() {
@@ -54,7 +60,12 @@ private static Shooter instance;
 	
 	public static void injectAfterSpeed(double speed) {
 		setShooterSpeed(speed);
-		if(getSpeed() > speed-45) setElevator(.65);
+		if(Math.abs((int)(speed-getSpeed())) < 50){
+			setElevator(1);
+		} else {
+			setElevator(0);
+			setConvPower(.7);
+		}
 	}
 	
 	public static void addF(double a){

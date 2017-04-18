@@ -1,12 +1,10 @@
 package org.usfirst.frc.team548.robot.AutoModes;
 
-import org.usfirst.frc.team548.robot.Climber;
 import org.usfirst.frc.team548.robot.Constants;
 
-public class MiddleGear extends AutoMode {
-
-	public MiddleGear() {
-		super("Middle Gear Only");
+public class MiddleGearHopper extends AutoMode {
+	public MiddleGearHopper() {
+		super("Middle Gear and then hopper");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -19,8 +17,12 @@ public class MiddleGear extends AutoMode {
 		
 		driveDistanceWithArm(2, .6, 5.925, 2, Constants.GEARING_PEGHEIGHT);
 		GearIngestorExgeset(.7);
-		driveDistanceWithArm(.63, -.2, .5, 0, 50);
-		driveDistanceWithArm(.6, -.5, 1, .1, Constants.GEARING_PEGHEIGHT);
+		driveDistance(2, -.6, 3, .5, false);
+		turnToAngleInTime(.5, -90, false);
+		driveDistance(1, .7, 4.20, .5, false);
+		turnToAngleInTime(.5, 90, false);
+		
+		
 	}
 
 }

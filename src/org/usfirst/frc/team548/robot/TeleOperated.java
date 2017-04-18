@@ -118,8 +118,9 @@ public class TeleOperated {
 				wiggle ++;
 				if (wiggle > 6) wiggle = 0;
 			} else {
+				//GearIngestor.setArmPower(.1);
 				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT+gearOffset);
-				/// GearIngestor.stopArm();
+				// GearIngestor.stopArm();
 			}
 		} else {
 			GearIngestor.setArmPower(-.7);//Go down
@@ -130,20 +131,31 @@ public class TeleOperated {
 		else manip.setRightRumble(0);
 	
 		
-		if(manip.getPOV() == 180) {
+		if(manip.getRightJoystickButton()) {
 			Climber.setClimbOpen(true);
-		} else if(manip.getPOV() == 0 ) {
+		} else if(manip.getPOV() == 270) {
 			Climber.setClimbOpen(false);
 		}
 		
 		if(manip.getBackButton()) gearOffset = 0;
 		
+		if(manip.getLeftTriggerButton()) {
+			Shooter.injectAfterSpeed(Constants.SHOOT_AUTON_SPEED);
+		}
+		else if (manip.getLeftBumper()){
+			Shooter.setConvPower(-.5);
+			Shooter.setElevator(-.7);
+		}
+		
+		else {
+			Shooter.stop();
+		}
 		
 	
-		if(!gearArmOffsetPress && manip.getLeftTriggerButton()) {
+		if(!gearArmOffsetPress && manip.getPOV() == 180) {
 			gearOffset-=20;
 			gearArmOffsetPress = true;
-		} else if(!gearArmOffsetPress && manip.getLeftBumper()) {
+		} else if(!gearArmOffsetPress && manip.getPOV() == 0) {
 			gearOffset+=20;
 			gearArmOffsetPress = true;
 		} else {
@@ -179,7 +191,7 @@ public class TeleOperated {
 //		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
 //		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
 //		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
-//		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
+		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
 //		SmartDashboard.putBoolean("Ready for takeoff", Climber.isOpen());
 	}
 
