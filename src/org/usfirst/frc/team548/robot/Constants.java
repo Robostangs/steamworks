@@ -46,7 +46,7 @@ public class Constants {
 	
 	public static final double GEARING_MAX = 2209;
 	public static final double GEARING_MIN = 0;
-	public static final double GEARING_PEGHEIGHT = 1090;
+	public static final double GEARING_PEGHEIGHT = 1200;  
 	
-	public static final double GEARING_ZERO = .128;
+	public static final double GEARING_ZERO = .509;
 }

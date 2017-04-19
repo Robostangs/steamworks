@@ -115,8 +115,9 @@ private static int wiggle = 0;
 			} else if (manip.getYButton()) {
 				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
 			} else if (manip.getRightTriggerButton()) {
-				
-				 GearIngestor.setArmPos(Constants.GEARING_MIN);
+				GearIngestor.setArmPos(Constants.GEARING_MIN);
+			} else if(DriveTrain.isHigh()) {
+				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
 			} else if(manip.getStartButton()){
 				if(wiggle < 4){
 					GearIngestor.setArmPower(-.5);
