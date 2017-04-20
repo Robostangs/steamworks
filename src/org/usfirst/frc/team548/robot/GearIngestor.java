@@ -24,6 +24,7 @@ public class GearIngestor {
 		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
+		arm.setPID(10, .00001, 0);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
 	}
@@ -71,12 +72,7 @@ public class GearIngestor {
 	
 	public static void setArmPower(double power) {
 		arm.changeControlMode(TalonControlMode.PercentVbus);
-		if(power > 0 && getArmPos() > Constants.GEARING_MAX) arm.set(0);
-		else if(power < 0 && getArmPos() < 0){
-			
-			arm.set(0);
-		}
-		else arm.set(power);
+		arm.set(power);
 	}
 	public static double getArmPos() {
 		return arm.getEncPosition();
@@ -95,8 +91,17 @@ public class GearIngestor {
 	}
 	
 	public static void setArmOffSet() {
+		if(Constants.GEARING_ZERO < .5) {
+			if(getAbsPos() > Constants.GEARING_ZERO && getAbsPos() > .5) {
+				setArmEncPos(-(int)((Constants.GEARING_ZERO+(1-(getAbsPos()%1)))*4095));
+			} else {
+				setArmEncPos((int)((((getAbsPos()%1)-Constants.GEARING_ZERO))*4095));
+			}
+		} else {
+			//TODO
+		}
 		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
-		setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
 	}
 	
 	private static double locSub(double v, double c) {

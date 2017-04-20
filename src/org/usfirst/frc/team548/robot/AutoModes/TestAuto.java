@@ -24,9 +24,9 @@ public class TestAuto extends AutoMode {
 //		driveDistance(2.0, -.5, 5.0, 1);
 		//turnToAngleInTime()
 		
-		driveDistance(3, -.9, 7.7, 1.5, false);
-		turnToAngleInTime(3, -62, false);
-		
+		//driveDistance(3, -.9, 7.7, 1.5, false);
+		turnToAngleInTime(3, 365, false);
+		driveInTime(2, .2);		
 	}
 
 	

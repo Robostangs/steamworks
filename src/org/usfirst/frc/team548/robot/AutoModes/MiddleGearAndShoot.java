@@ -14,10 +14,12 @@ public class MiddleGearAndShoot extends AutoMode {
 	@Override
 	protected void run() {
 		DriveTrain.shiftHigh(true);
-		driveDistance(1, -.7, 6, 3, false);
-		
+		driveDistance(2, .7, 6, 3, false);
 		openGear(.5, true);
-		driveDistance(.63, .3, .5, 0, true);
+		driveDistance(2, -.3, .5, 0, true);
+		shootAtSpeed(1000, Constants.SHOOT_AUTON_SPEED);
+		
+		
 //		driveDistance(.6, .5, 1, .1, false);
 //		if(isRed) turnToAngleInTime(.7, 65, false);
 //		else turnToAngleInTime(.7, -65, false);

@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		new MiddleGear().start();
+		new TestAuto().start();
 	}
 
 	/**

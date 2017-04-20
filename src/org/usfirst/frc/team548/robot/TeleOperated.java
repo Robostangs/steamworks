@@ -17,7 +17,7 @@ private static int wiggle = 0;
 	
 	public static XBoxController driver;
 	public static XBoxController manip;
-	private static boolean povPressed = false, timerStart = false;
+	private static boolean povPressed = false, timerStart = false, gearArmOffsetPress = false;
 	
 	private static double shooterAdjustment = 0;
 	
@@ -25,7 +25,7 @@ private static int wiggle = 0;
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
 		manip = new XBoxController(Constants.XB_POS_MANIP);
 	}
-	
+	private static int gearOffset = 0;
 	public static void run(){
 		/**
 		 * Driver
@@ -83,18 +83,24 @@ private static int wiggle = 0;
 		 */
 		if(Math.abs(manip.getRightStickYAxis()) > .2) Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
 		else Climber.setPower(0);
+
 		
+		
+		//Gear Ingestor
 		if (!manip.getBButton()) {
 			//Roller
 			if (manip.getRightBumper()) {
 				manip.setLeftRumble(0);
 				driver.setLeftRumble(0);
 				GearIngestor.setRollerBarPower(.7d);
-			} else if (GearIngestor.getArmPos() < 300) {
+			} else if (GearIngestor.getArmPos() < -1900) {
 				GearIngestor.rollerIngestCurrentLimiting();
 				if (GearIngestor.isGearInIngestor()) {
 					manip.setLeftRumble(1);
 					driver.setLeftRumble(1);
+				} else {
+					manip.setLeftRumble(0);
+					driver.setLeftRumble(0);
 				}
 			} else if (manip.getPOV() == 90) {
 				GearIngestor.rollerIngestCurrentLimiting();
@@ -111,30 +117,57 @@ private static int wiggle = 0;
 
 			// ARM
 			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
-				GearIngestor.setArmPower(-manip.getLeftStickYAxis());
+				GearIngestor.setArmPower(-manip.getLeftStickYAxis()*.25);
 			} else if (manip.getYButton()) {
-				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
+				GearIngestor.setArmPos(Constants.GEARING_MAX);
 			} else if (manip.getRightTriggerButton()) {
-				GearIngestor.setArmPos(Constants.GEARING_MIN);
-			} else if(DriveTrain.isHigh()) {
-				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
-			} else if(manip.getStartButton()){
-				if(wiggle < 4){
+				
+				 GearIngestor.setArmPos(Constants.GEARING_MIN);
+			} else if (DriveTrain.isHigh()) {
+				
+				 GearIngestor.setArmPos(Constants.GEARING_MAX);
+			}  else if(manip.getStartButton()){
+				if(wiggle < 3){
 					GearIngestor.setArmPower(-.5);
 				}
-				else if(wiggle >= 4){
+				else if(wiggle >= 3){
 					GearIngestor.setArmPower(.5);
 				}	
 				wiggle ++;
-				if (wiggle > 8) wiggle = 0;
+				if (wiggle > 6) wiggle = 0;
 			} else {
-				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
-				/// GearIngestor.stopArm();
+				//GearIngestor.setArmPower(.1);
+				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT+gearOffset);
+				// GearIngestor.stopArm();
 			}
 		} else {
-			GearIngestor.setArmPos(0);//Go down
+			GearIngestor.setArmPower(-.7);//Go down
 			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
+		
+		if(Climber.isOpen()) manip.setRightRumble(1);
+		else manip.setRightRumble(0);
+	
+		
+		if(manip.getRightJoystickButton()) {
+			Climber.setClimbOpen(true);
+		} else if(manip.getPOV() == 270) {
+			Climber.setClimbOpen(false);
+		}
+		
+		if(manip.getBackButton()) gearOffset = 0;
+		
+	
+		if(!gearArmOffsetPress && manip.getPOV() == 180) {
+			gearOffset-=20;
+			gearArmOffsetPress = true;
+		} else if(!gearArmOffsetPress && manip.getPOV() == 0) {
+			gearOffset+=20;
+			gearArmOffsetPress = true;
+		} else {
+			gearArmOffsetPress = false;
+		}
+		
 		SmartDashboard.putNumber("Arm pos", GearIngestor.getArmPos());
 		/*
 		 * Testing MAKE SURE TO REMOVE BEFORE COMP

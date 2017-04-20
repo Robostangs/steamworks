@@ -20,11 +20,7 @@ public class Constants {
 	public static final int CLIMB_TALONID_CLIMBTALON1 = 10;
 	public static final int CLIMB_TALONID_CLIMBTALON2= 3;
 	public static final int CLIMB_SOL_PORT = 7;
-	//Ingestor
-	public static final int ING_TALONID_ELEVATOR = 2;
-	public static final int ING_TALONID_ROLLERMOTOR = 11;
-	public static final int ING_SOLENOID_LEFTROLLERSOL = 2;
-	public static final int ING_SOLENOID_RIGHTROLLERSOL = 3;
+	
 	//Shooter
 	public static final int SHOOT_TALONID_TALONRIGHT= 10;
 	public static final int SHOOT_TALONID_TALONLEFT= 3;
@@ -44,9 +40,9 @@ public class Constants {
 	public static final int GEARING_TALONID_ARM = 11;
 	public static final int GEARING_TALONID_ROLLER = 12;
 	
-	public static final double GEARING_MAX = 2209;
-	public static final double GEARING_MIN = 0;
-	public static final double GEARING_PEGHEIGHT = 1200;  
+	public static final double GEARING_MIN = -2209;
+	public static final double GEARING_MAX = 0;
+	public static final double GEARING_PEGHEIGHT = -1009;  
 	
-	public static final double GEARING_ZERO = .509;
+	public static final double GEARING_ZERO = .079;//.51 max
 }
