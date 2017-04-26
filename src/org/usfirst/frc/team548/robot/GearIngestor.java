@@ -2,6 +2,7 @@ package org.usfirst.frc.team548.robot;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.FeedbackDeviceStatus;
 import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,8 +26,10 @@ public class GearIngestor {
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
 		arm.setPID(10, .00001, 0);
+		arm.enableLimitSwitch(false, false);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
+		
 	}
 	
 	
@@ -66,8 +69,26 @@ public class GearIngestor {
 	
 	
 	public static void setArmPos(double pos) {
-		arm.changeControlMode(TalonControlMode.Position);
-		arm.set(pos);
+		if(isEncConnected()) {
+			arm.changeControlMode(TalonControlMode.Position);
+			arm.set(pos);
+		} else {
+			stopArm();
+		}
+		
+		
+	}
+	
+	public static boolean isEncConnected() {
+		return arm.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) == FeedbackDeviceStatus.FeedbackStatusPresent;
+	}
+	
+	public static int getRevSticky() {
+		return arm.getStickyFaultRevLim();
+	}
+	
+	public static int getForSticky() {
+		return arm.getStickyFaultForLim();
 	}
 	
 	public static void setArmPower(double power) {
@@ -92,13 +113,13 @@ public class GearIngestor {
 	
 	public static void setArmOffSet() {
 		if(Constants.GEARING_ZERO < .5) {
-			if(getAbsPos() > Constants.GEARING_ZERO && getAbsPos() > .5) {
+			if(getAbsPos()%1 > Constants.GEARING_ZERO) {
 				setArmEncPos(-(int)((Constants.GEARING_ZERO+(1-(getAbsPos()%1)))*4095));
 			} else {
 				setArmEncPos((int)((((getAbsPos()%1)-Constants.GEARING_ZERO))*4095));
 			}
 		} else {
-			//TODO
+			setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
 		}
 		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
 		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));

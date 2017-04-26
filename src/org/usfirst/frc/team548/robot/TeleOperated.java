@@ -116,32 +116,33 @@ private static int wiggle = 0;
 			}
 
 			// ARM
-			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
-				GearIngestor.setArmPower(-manip.getLeftStickYAxis()*.25);
-			} else if (manip.getYButton()) {
-				GearIngestor.setArmPos(Constants.GEARING_MAX);
-			} else if (manip.getRightTriggerButton()) {
-				
-				 GearIngestor.setArmPos(Constants.GEARING_MIN);
-			} else if (DriveTrain.isHigh()) {
-				
-				 GearIngestor.setArmPos(Constants.GEARING_MAX);
-			}  else if(manip.getStartButton()){
-				if(wiggle < 3){
-					GearIngestor.setArmPower(-.5);
+			
+				if (Math.abs(manip.getLeftStickYAxis()) > .2) {
+					GearIngestor.setArmPower(-manip.getLeftStickYAxis() * .4);
+				} else if (manip.getYButton()) {
+					GearIngestor.setArmPos(Constants.GEARING_MAX);
+				} else if (manip.getRightTriggerButton()) {
+
+					GearIngestor.setArmPos(Constants.GEARING_MIN);
+				} else if (DriveTrain.isHigh()) {
+					GearIngestor.setArmPos(Constants.GEARING_MAX);
+				} else if (manip.getStartButton()) {
+					if (wiggle < 3) {
+						GearIngestor.setArmPower(-.5);
+					} else if (wiggle >= 3) {
+						GearIngestor.setArmPower(.5);
+					}
+					wiggle++;
+					if (wiggle > 6)
+						wiggle = 0;
+				} else {
+					// GearIngestor.setArmPower(.1);
+					GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT + gearOffset);
+					// GearIngestor.stopArm();
 				}
-				else if(wiggle >= 3){
-					GearIngestor.setArmPower(.5);
-				}	
-				wiggle ++;
-				if (wiggle > 6) wiggle = 0;
-			} else {
-				//GearIngestor.setArmPower(.1);
-				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT+gearOffset);
-				// GearIngestor.stopArm();
-			}
+			
 		} else {
-			GearIngestor.setArmPower(-.7);//Go down
+			GearIngestor.setArmPos(Constants.GEARING_MIN);
 			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
 		
@@ -186,6 +187,9 @@ private static int wiggle = 0;
 //		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
 		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
 		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
+		SmartDashboard.putBoolean("Gear Encoder", GearIngestor.isGearInIngestor());
+		SmartDashboard.putNumber("Sticky Rev", GearIngestor.getRevSticky());
+		SmartDashboard.putNumber("Sticky For", GearIngestor.getForSticky());
 //		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
 //		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
 	}

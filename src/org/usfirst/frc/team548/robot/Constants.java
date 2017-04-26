@@ -40,9 +40,9 @@ public class Constants {
 	public static final int GEARING_TALONID_ARM = 11;
 	public static final int GEARING_TALONID_ROLLER = 12;
 	
-	public static final double GEARING_MIN = -2209;
+	public static final double GEARING_MIN = -2300;
 	public static final double GEARING_MAX = 0;
 	public static final double GEARING_PEGHEIGHT = -1009;  
 	
-	public static final double GEARING_ZERO = .079;//.51 max
+	public static final double GEARING_ZERO = .123;//.51 max
 }

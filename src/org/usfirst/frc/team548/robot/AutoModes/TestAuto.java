@@ -25,10 +25,21 @@ public class TestAuto extends AutoMode {
 		//turnToAngleInTime()
 		
 		//driveDistance(3, -.9, 7.7, 1.5, false);
-		turnToAngleInTime(3, 365, false);
-		driveInTime(2, .2);		
+		
+		
+		
+		//turnToAngleInTime(3, 365, false);
+		//driveInTime(2, .2);
+		
+		//	driveDistanceWithArm(2.3, .9, 3, 1.5, Constants.GEARING_PEGHEIGHT);
+			//driveDistance(2.3, .9, 7.2, 1.5, false); //drive back toward gear
+			//if(isRed)turnToAngleInTime(2, -57, false); //turn to gear spring (-) is red
+			 turnToAngleInTime(2, 57, false);
+			
+
+		}
 	}
 
 	
 
-}
+

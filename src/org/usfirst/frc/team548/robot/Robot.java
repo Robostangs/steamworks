@@ -90,13 +90,14 @@ public class Robot extends IterativeRobot {
 
 		// GearIngestor.setDoorOpen(TeleOperated.driver.getAButton());
 
-		System.out.println(GearIngestor.getArmPos() + " " + GearIngestor.getAbsPos());
+		System.out.println(GearIngestor.getArmPos() + " " + GearIngestor.getAbsPos()+ " "+GearIngestor.isEncConnected()+" "+GearIngestor.getRevSticky()+" "+GearIngestor.getForSticky());
 
 		//
 		// if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
 		// GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
-		if (!testStarted) {
-			if (TeleOperated.driver.getAButton()) {
+			if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2) {
+				GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
+			} else if (TeleOperated.driver.getAButton()) {
 				GearIngestor.setArmPos(Constants.GEARING_MIN);
 				// .443 gear
 				// .703 max
@@ -105,9 +106,7 @@ public class Robot extends IterativeRobot {
 			} else {
 				GearIngestor.stopArm();
 			}
-		} else {
-			
-		}
+		
 	}
 	
 	
