@@ -21,32 +21,30 @@ public class Constants {
 	public static final int CLIMB_TALONID_CLIMBTALON2 = 10;
 	public static final int CLIMB_SOL_PORT = 6;
 	
-	
 	//Shooter
 	public static final int SHOOT_TALONID_TALONRIGHT= 15;
 	public static final int SHOOT_TALONID_TALONLEFT= 14;
 	public static final int SHOOT_TALONID_TALONELEVATOR = 13;
 	public static final int SHOOT_TALONID_TALONCONVA = 16;
-	public static final int SHOOT_AUTON_SPEED = 2000;//4270
-	
+	public static final int SHOOT_AUTON_SPEED = 3050;//4270
+	public static final int SHOOT_MIDDLE_AUTON_SPEED = 3850;
+	public static final int SHOOT_FAR_SIDE_AUTON_SPEED = 2000;
+	public static final int SHOOT_CLOSE_SIDE_AUTON_SPEED= 3333;
 	public static final double SHOOT_PID_P = .005;
 	public static final double SHOOT_PID_I = 0.00005;
 	public static final double SHOOT_PID_D = 0;
-	public static final double SHOOT_PID_F = .0216;
+	public static final double SHOOT_PID_F = 0.02182;
 	public static final int SHOOT_PID_IZONE = 200;
-	//Gear Stuff
-	public static final int GEAR_SOL_PORT = 5;
 	
 	//Gear Ingestor
 	public static final int GEARING_TALONID_ARM = 1;
 	public static final int GEARING_TALONID_ROLLER = 11;
-	
+	public static final int GEAR_SOL_PORT = 5;
 	public static final double GEARING_MAX = 0;
 	public static final double GEARING_MIN = -2350;
 	public static final double GEARING_PEGHEIGHT = -950;
-	
-	public static final double GEARING_ZERO = .36;
+	public static final double GEARING_ZERO = .0935;
 	
 	//Auto
-	public static final double AUTO_SIDE_DRIVE_DISTANCE = 7;
+	public static final double AUTO_SIDE_DRIVE_DISTANCE = 7.1;
 }

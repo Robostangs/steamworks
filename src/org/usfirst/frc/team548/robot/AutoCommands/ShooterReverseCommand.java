@@ -5,11 +5,9 @@ import org.usfirst.frc.team548.robot.Shooter;
 public class ShooterReverseCommand extends AutoCommandBase {
 	private double speed;
 
-	public ShooterReverseCommand(double timeOut, double speed) {
+	public ShooterReverseCommand(double timeOut) {
 		super(timeOut);
 		// TODO Auto-generated constructor stub
-		
-		this.speed  = speed;
 	}
 	@Override
 	public void init() {

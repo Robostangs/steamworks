@@ -20,9 +20,6 @@ public class TeleOperated {
 	public static XBoxController driver;
 	public static XBoxController manip;
 	private static boolean povPressed = false, timerStart = false, gearArmOffsetPress = false;
-	
-
-	//private static double shooterAdjustment = 0;
 	private static double gearOffset = 0;
 	private TeleOperated() {
 		driver = new XBoxController(Constants.XB_POS_DRIVER);
@@ -46,7 +43,7 @@ public class TeleOperated {
 		} else if (driver.getXButton()){
 			DriveTrain.drive(.15, .15);
 		} else if (driver.getYButton()){
-			//DriveTrain.drive(.1, .1);
+			
 			if(!dPressed){
 				DriveTrain.restEncoders();
 				dPressed = true;
@@ -56,37 +53,34 @@ public class TeleOperated {
 		} else {
 			dPressed = false;
 			DriveTrain.arcadeDrice(driver.getRightStickYAxis(), Utils.negPowTwo(driver.getLeftStickXAxis()));
-			//DriveTrain.humanDrive(driver.getLeftStickYAxis(), driver.getRightStickYAxis());
 		}
 		if(DriverStation.getInstance().isBrownedOut()) driver.setRightRumble(1);
 		else driver.setRightRumble(0);
 		
 		DriveTrain.shiftHigh(driver.getRightBumper());
 		
+		
 		/**
 		 * Manip
 		 */
 		if(Math.abs(manip.getRightStickYAxis()) > .2) Climber.setPower(-Math.abs(manip.getRightStickYAxis()));
 		else Climber.setPower(0);
-
-		
-		
-		//Gear Ingestor
 		if (!manip.getBButton()) {
-			//Roller
 			if (manip.getRightBumper()) {
 				manip.setLeftRumble(0);
 				driver.setLeftRumble(0);
 				GearIngestor.setRollerBarPower(.7d);
-			} else if (GearIngestor.getArmPos() < 300) {
+			} else if (GearIngestor.getArmPos() < Constants.GEARING_MIN+300) {
 				GearIngestor.rollerIngestCurrentLimiting();
 				if (GearIngestor.isGearInIngestor()) {
 					manip.setLeftRumble(1);
 					driver.setLeftRumble(1);
+					
 				} else {
 					manip.setLeftRumble(0);
 					driver.setLeftRumble(0);
 				}
+				USBLED.isHasGear(GearIngestor.isGearInIngestor());
 			} else if (manip.getPOV() == 90) {
 				GearIngestor.rollerIngestCurrentLimiting();
 				if (GearIngestor.isGearInIngestor()) {
@@ -94,7 +88,7 @@ public class TeleOperated {
 					driver.setLeftRumble(1);
 				}
 			} else {
-
+				USBLED.isHasGear(false);
 				manip.setLeftRumble(0);
 				driver.setLeftRumble(0);
 				GearIngestor.setRollerBarPower(0);
@@ -102,12 +96,14 @@ public class TeleOperated {
 
 			// ARM
 			if (Math.abs(manip.getLeftStickYAxis()) > .2) {
-				GearIngestor.setArmPower(-manip.getLeftStickYAxis()*.25);
+				GearIngestor.setArmPower(-manip.getLeftStickYAxis()*.3);
 			} else if (manip.getYButton()) {
-				GearIngestor.setArmPos(Constants.GEARING_MAX-50);
+				GearIngestor.setArmPos(Constants.GEARING_MAX-200);
 			} else if (manip.getRightTriggerButton()) {
 				
 				 GearIngestor.setArmPos(Constants.GEARING_MIN);
+			} else if (DriveTrain.isHigh()) {
+				 					GearIngestor.setArmPos(Constants.GEARING_MAX);
 			} else if(manip.getStartButton()){
 				if(wiggle < 3){
 					GearIngestor.setArmPower(-.5);
@@ -118,12 +114,10 @@ public class TeleOperated {
 				wiggle ++;
 				if (wiggle > 6) wiggle = 0;
 			} else {
-				//GearIngestor.setArmPower(.1);
 				GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT+gearOffset);
-				// GearIngestor.stopArm();
 			}
 		} else {
-			GearIngestor.setArmPower(-.7);//Go down
+			GearIngestor.setArmPos(Constants.GEARING_MIN);//Go down
 			GearIngestor.setRollerBarPower(.7d);//Spit out gear
 		}
 		
@@ -165,52 +159,20 @@ public class TeleOperated {
 		/**
 		 * LEDS
 		 */
-		USBLED.isHasGear(GearIngestor.isGearInIngestor());
+		
 		USBLED.isRftOut(Climber.isOpen());
-		USBLED.isWantGear(GearIngestor.getArmPos() < 300);
-		USBLED.isWombo(manip.getAButton());
+		USBLED.isWantGear(manip.getAButton());
+		//USBLED.isWombo(manip.getAButton());
+		USBLED.isWombo(driver.getYButton());
 		
-		
-		//Ingestor.setRollerBarDown(!manip.getBackButton());
-		/**
-		 * Testing MAKE SURE TO REMOVE BEFORE COMP
-		 */
-//		if(driver.getBButton()) DriveTrain.restHyro();
-//		else if(driver.getYButton()) DriveTrain.calibrateHyro();
-//		else if(driver.getXButton()) DriveTrain.restEncoders();
 		SmartDashboard.putData("HYRO", DriveTrain.hyro);
-		
 		if(driver.getAButton()) DriveTrain.restHyro();
-		
-		
-		//SmartDashboard stuff
 		SmartDashboard.putNumber("Hyro", DriveTrain.getAngle());
-//		SmartDashboard.putNumber("Pressure", DriveTrain.getPressure());
-//		SmartDashboard.putNumber("Right pos", DriveTrain.getRightEncoderDistance());
-//		SmartDashboard.putNumber("Left pos", DriveTrain.getLeftEncoderDistance());  
-//		SmartDashboard.putNumber("Right speed", DriveTrain.getRightSpeed());
-//		SmartDashboard.putNumber("Left speed", DriveTrain.getLeftSpeed());
-//		SmartDashboard.putBoolean("High gear", DriveTrain.isHigh());
 		SmartDashboard.putNumber("Speed", Shooter.getSpeed());
-//		SmartDashboard.putBoolean("Ready for takeoff", Climber.isOpen());
 	}
 
 	public static void init() {
 		DriveTrain.breakMode(false);
 	}
-
-	// MANIP
-	// Start: Gear during teleop
-	// Right Trigger: shoot and elevator for fuel
-	// Right Bumper: reverse shooter elevator
-	// B Button: open & close gears
-	// Y BUtton: enable/disable RFT
-	// Right/Left on dpad: expand/compress shooter wall
-	// up/down on dpad: up/down with the power of the shooter
-	// x button: set elevator power
-	// y button: set elevator bar power
-	// Driver
-	// A Button: wiggle
-	// alex's weird controls
 
 }

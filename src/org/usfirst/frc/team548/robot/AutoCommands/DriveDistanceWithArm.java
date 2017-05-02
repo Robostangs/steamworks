@@ -39,7 +39,7 @@ public class DriveDistanceWithArm extends AutoCommandBase {
 	@Override
 	public void end() {
 		DriveTrain.stop();
-		GearIngestor.stopArm();
+		//GearIngestor.stopArm();
 	}
 
 	@Override

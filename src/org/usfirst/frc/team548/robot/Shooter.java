@@ -22,17 +22,13 @@ private static Shooter instance;
 		talonLeft.setPID(Constants.SHOOT_PID_P, Constants.SHOOT_PID_I, Constants.SHOOT_PID_D, Constants.SHOOT_PID_F, Constants.SHOOT_PID_IZONE, 0, 0);
 		conv = new CANTalon(Constants.SHOOT_TALONID_TALONCONVA);
 		talonRight.changeControlMode(TalonControlMode.Follower);
-		//talonRight.reverseSensor(true);
 		talonRight.set(talonLeft.getDeviceID());
 		elvevator = new CANTalon(Constants.SHOOT_TALONID_TALONELEVATOR);
-		//talonRight.enableBrakeMode(false);
-		//talonLeft.enableBrakeMode(false);
 	}
 	
 	public static void setShooterPower(double p) {
 		talonLeft.changeControlMode(TalonControlMode.PercentVbus);
 		talonLeft.set(p);
-		//talonRight.set(p);
 	}
 	
 	public static void setElevator(double p) {

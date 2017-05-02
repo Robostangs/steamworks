@@ -31,20 +31,23 @@ public class Robot extends IterativeRobot {
 		PDP = new PowerDistributionPanel();
 		
 		austinChooser = new SendableChooser<AutoMode>();
-		//austinChooser.addDefault("Shoot Only", new OnlyShoot());
 		austinChooser.addDefault("Middle Gear", new MiddleGear());
-	//	austinChooser.addObject("Shoot Only", new OnlyShoot());
 		austinChooser.addObject("Red Side Gear no driving", new SideGear(true));
 		austinChooser.addObject("Blue Side Gear  no driving", new SideGear(false));
-	//  austinChooser.addObject("Red Side Gear with driving", new HershIdealSideGear(true));
-	//	austinChooser.addObject("Blue side gear with driving", new HershIdealSideGear(false));
-		austinChooser.addObject("Middle gear with driving", new HershIdealMiddleGear());
 		austinChooser. addObject("Red right", new SideGearRightSideRed());
 		austinChooser.addObject("Blue right", new SideGearRightSideBlue());
 		austinChooser.addObject("Red left", new SideGearLeftSideRed());
 		austinChooser.addObject("Blue left", new SideGearLeftSideBlue());
-		austinChooser.addObject("side gear blue and shoot", new SideGearShoot(false));
-		austinChooser.addObject("side gear red and shoot", new SideGearShoot(true));
+		austinChooser.addObject("Shoot side gear blue", new SideGearShoot(false));
+		austinChooser.addObject("Shoot side gear red. Line this one up backwards with shooter aimed at boiler", new SideGearShoot(true));
+		austinChooser.addObject("Middle gear shoot red", new MiddleGearAndShoot(true));
+		austinChooser.addObject("Middle gear shoot blue", new MiddleGearAndShoot(false));
+		austinChooser.addObject("Shoot far side gear red", new FarSideGearShoot(true));
+		austinChooser.addObject("Shoot far side gear blue", new FarSideGearShoot(false));
+		austinChooser.addObject("Middle gear with driving to the feeder station  red", new HershIdealMiddleGear(true));
+		austinChooser.addObject("Middle gear with driving to the feeder station  blue", new HershIdealMiddleGear(false));
+		austinChooser.addObject("Shoot middle gear blue", new ShootAndMiddleGear(false));
+		austinChooser.addObject("Shoot and middle gear red. Line this up backwards with shooter aimed at boiler", new ShootAndMiddleGear(true));
 		
 		SmartDashboard.putData("AUTO MODE", austinChooser);
 		GearIngestor.setArmOffSet();
@@ -75,21 +78,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		TeleOperated.run();
-//		SmartDashboard.putNumber("Speed", 
-//				Shooter.getSpeed());
-//		if(Math.abs(TeleOperated.driver.getTriggers()) > .1) {
-//			Shooter.setShooterPower(TeleOperated.driver.getTriggers());
-//		} else if(TeleOperated.driver.getAButton()) {
-//			Shooter.setShooterSpeed(3000);
-//		} else {
-//			Shooter.stop();
-//		}
-//		
-//		if(TeleOperated.driver.getRightBumper()) {
-//			Shooter.setElevator(0.8);
-//		} else {
-//			Shooter.setElevator(0);
-//		}
 		SmartDashboard.putNumber("Arm pos", GearIngestor.getArmPos());
 	}
 
@@ -98,37 +86,20 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-//		Shooter.setShooterPower(TeleOperated.driver.getTriggers());
-//		DriveTrain.breakMode(true);
-//		if(TeleOperated.driver.getAButton()) DriveTrain.restHyro();
-//		if(TeleOperated.driver.getBButton()) DriveTrain.calibrateHyro();
-		System.out.println(GearIngestor.getArmPos() + " "+GearIngestor.getAbsPos());
-		
-//		
-//		if(Math.abs(TeleOperated.driver.getLeftStickYAxis()) > .2 ) {
-//			GearIngestor.setArmPower(TeleOperated.driver.getLeftStickYAxis());
+		System.out.println(GearIngestor.getArmPos() + " "+GearIngestor.getAbsPos()+ " "+GearIngestor.isEncConnected());
 		if (TeleOperated.driver.getAButton()) {
 			GearIngestor.setArmPos(Constants.GEARING_MIN);
-			//.443 gear
-			//.703 max
-			//GearIngestor.setArmPower(-.3);
 		}  else if(TeleOperated.driver.getBButton()) {
 			GearIngestor.setArmPos(Constants.GEARING_MAX);
+		}else if(TeleOperated.driver.getXButton()) {
+			GearIngestor.setArmPos(Constants.GEARING_PEGHEIGHT);
 		} else {
 			if(Math.abs(TeleOperated.driver.getRightStickYAxis()) > .2) {
 				GearIngestor.setArmPower(TeleOperated.driver.getRightStickYAxis());
 			} else {
 				GearIngestor.stopArm();
 			}
-			
 		}
-//		
-		
-//		if(TeleOperated.driver.getRightTriggerButton()) GearIngestor.rollerIngestCurrentLimiting();
-//		else if(TeleOperated.driver.getLeftTriggerButton()) GearIngestor.setRollerBarPower(.5);
-//		else GearIngestor.stopRoller();
-		
-		
 	}
 	@Override
 	public void disabledPeriodic() {
@@ -137,8 +108,5 @@ public class Robot extends IterativeRobot {
 		TeleOperated.manip.setLeftRumble(0);
 		TeleOperated.driver.setRightRumble(0);
 		TeleOperated.driver.setLeftRumble(0);
-		//System.out.println(GearIngestor.getAbsPos());
-		//SmartDashboard.putData("AUTO MODE", austinChooser);
-		
 	}
 }

@@ -2,10 +2,9 @@ package org.usfirst.frc.team548.robot;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.FeedbackDeviceStatus;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 public class GearIngestor {
@@ -25,7 +24,9 @@ public class GearIngestor {
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
 		//arm.reverseOutput(true);
-		arm.setPID(7, 0.001, 0);
+		arm.setPID(1, 0.0001, 0);
+	
+		arm.enableLimitSwitch(false, false);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
 		currentTimer = new Timer();
 	}
@@ -67,8 +68,18 @@ public class GearIngestor {
 	
 	
 	public static void setArmPos(double pos) {
-		arm.changeControlMode(TalonControlMode.Position);
-		arm.set(pos);
+		if(isEncConnected()) {
+			arm.changeControlMode(TalonControlMode.Position);
+			arm.set(pos);
+		} else {
+			stopArm();
+		}
+			
+	}
+
+	
+	public static boolean isEncConnected() {
+		return arm.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) == FeedbackDeviceStatus.FeedbackStatusPresent;
 	}
 	
 	public static void setArmPower(double power) {
@@ -92,7 +103,18 @@ public class GearIngestor {
 	}
 	
 	public static void setArmOffSet() {
-		setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
+		if(Constants.GEARING_ZERO >= .7) {
+			setArmEncPos(-(int)((Constants.GEARING_ZERO-(getAbsPos()%1))*4095));
+		} else {
+			if(getAbsPos()%1 >= Constants.GEARING_ZERO && Math.abs(Constants.GEARING_ZERO-getAbsPos()%1) < .1) { //When the arm is too far back
+				setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
+			} else if(getAbsPos()%1 < Constants.GEARING_ZERO) {
+				setArmEncPos(-(int)((Constants.GEARING_ZERO-(getAbsPos()%1))*4095));//When arm is below zero(off) but has not passed zero
+			} else {
+				setArmEncPos(-(int)((Constants.GEARING_ZERO+(1-(getAbsPos()%1)))*4095));//When value has passed zero
+			}
+		}
+		//setArmEncPos((int)((locSub((getAbsPos()%1), Constants.GEARING_ZERO))*4095));
 		//setArmEncPos((int)(((getAbsPos()%1)-Constants.GEARING_ZERO)*4095));
 	}
 	
@@ -103,13 +125,4 @@ public class GearIngestor {
 			return (1 - c) + v;
 		}
 	}
-	
-	
-	
-	
-	//drive up slowly
-	//set as hard stop top
-	//hard stop top minus a number
-	//
-	
 }

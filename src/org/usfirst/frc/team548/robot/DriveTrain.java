@@ -22,7 +22,6 @@ public class DriveTrain implements PIDOutput {
 
 	private static CANTalon rightFront, rightBack, rightMini, leftFront, leftBack, leftMini;
 	private static Solenoid shifter;
-	//private static ADIS16448_IMU hyro;
 	public static AHRS hyro;
 	private static AnalogInput pressure;
 	private static PIDController pid;
@@ -35,10 +34,8 @@ public class DriveTrain implements PIDOutput {
 		leftBack = new CANTalon(Constants.DT_TALONID_LEFTBACK);
 		leftMini = new CANTalon(Constants.DT_TALONID_LEFTMINI);
 		shifter = new Solenoid(Constants.DT_SOLENOID_SHIFTER);
-
 		leftFront.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		rightMini.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		//hyro = new ADIS16448_IMU();
 		hyro = new AHRS(SerialPort.Port.kMXP);
 		pressure = new AnalogInput(0);
 		pid = new PIDController(0.017d, 0, 0, hyro, this);
@@ -142,7 +139,8 @@ public class DriveTrain implements PIDOutput {
 	public static double getRightSpeed() {
 		return rightMini.getSpeed();
 	}
-
+	
+	
 	public static void restEncoders() {
 		leftFront.setPosition(0);
 		rightMini.setPosition(0);

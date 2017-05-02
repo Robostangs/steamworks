@@ -1,5 +1,7 @@
 package org.usfirst.frc.team548.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -13,28 +15,30 @@ public class USBLED {
 	private static SerialPort serial;
 	private static byte status;
 	private static boolean[] statusBools;
-
+	private static boolean[] oldBools;
 	private USBLED() {
 		try {
 			serial = new SerialPort(9600, SerialPort.Port.kUSB1);
 		} catch (Exception e) {
-			System.out.println("RIP LEDS");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		status = 0;
 		statusBools = new boolean[8];
-//		new Thread(new Runnable() {
-//			public void run() {
-//				while (true) {
-//					sync();
-//					try {
-//						Thread.sleep(1000);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}).start();
+		oldBools = new boolean[8];
+		new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					try {
+						
+						sync();
+						//System.out.println("memes");
+						Thread.sleep(1000);
+					} catch (Exception e) {
+						//e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 	}
 
 	public static USBLED getInstance() {
@@ -51,17 +55,20 @@ public class USBLED {
 	}
 
 	private static void sync() {
+		//System.out.println(serial.readString());
 		updateDsValues();
 		updateByte();
 		try {
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 5; i++){
 				serial.write(new byte[] { status }, 1);
+			}
+			//System.out.println(Arrays.toString(statusBools));
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			try {
-				serial = new SerialPort(9600, SerialPort.Port.kUSB1);
+				serial = new SerialPort(9600, SerialPort.Port.kUSB);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
 			}
 			//e.printStackTrace();
 		}
@@ -82,10 +89,10 @@ public class USBLED {
 			statusBools[0] = true;
 			statusBools[1] = false;
 		}
-		if (DriverStation.getInstance().isAutonomous()) {
+		if (DriverStation.getInstance().isAutonomous()&&DriverStation.getInstance().isEnabled()) {
 			statusBools[2] = true;
 			statusBools[3] = false;
-		} else if (DriverStation.getInstance().isOperatorControl()) {
+		} else if (DriverStation.getInstance().isOperatorControl()&&DriverStation.getInstance().isEnabled()) {
 			statusBools[2] = true;
 			statusBools[3] = true;
 		} else if (DriverStation.getInstance().isFMSAttached()) {
@@ -99,17 +106,33 @@ public class USBLED {
 
 	public static void isHasGear(boolean hasGear) {
 		statusBools[4] = hasGear;
+		if(statusBools[4]!=oldBools[4]){
+			sync();
+			oldBools[4]=statusBools[4];
+		}
 	}
 
 	public static void isWantGear(boolean wantGear) {
 		statusBools[5] = !wantGear;
+		if(statusBools[5]!=oldBools[5]){
+			sync();
+			oldBools[5]=statusBools[5];
+		}
 	}
 
 	public static void isWombo(boolean wombo) {
 		statusBools[6] = wombo;
+		if(statusBools[6]!=oldBools[6]){
+			sync();
+			oldBools[6]=statusBools[6];
+		}
 	}
 
 	public static void isRftOut(boolean rft) {
 		statusBools[7] = rft;
+		if(statusBools[7]!=oldBools[7]){
+			sync();
+			oldBools[7]=statusBools[7];
+		}
 	}
 }

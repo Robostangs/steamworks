@@ -73,6 +73,10 @@ public abstract class AutoMode {
     	runCommand(new ArmGearExgest(sec));
     }
     
+    protected void offsetPower(double seconds, double power, boolean isRed){
+    	runCommand(new OffsetCommand(seconds, power, isRed));
+    }
+    
     private static void runCommand(AutoCommandBase command) {
         command.execute();
     }
