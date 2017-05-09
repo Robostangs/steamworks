@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	AutoMode autonCommand;
-	SendableChooser austinChooser;
+	SendableChooser<AutoMode> austinChooser;
 	
 	public static PowerDistributionPanel PDP;
 	/**
@@ -23,9 +23,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		DriveTrain.getInstance();
 		Climber.getInstance();
-		//Ingestor.getInstance();
 		Shooter.getInstance();
-		//TopGear.getInstance();
 		GearIngestor.getInstance();
 		TeleOperated.getInstance();
 		PDP = new PowerDistributionPanel();
@@ -58,7 +56,7 @@ public class Robot extends IterativeRobot {
 	//true is red, false is blue
 	@Override
 	public void autonomousInit() {
-		((AutoMode)austinChooser.getSelected()).start();
+		austinChooser.getSelected().start();
 	}
 
 	/**
@@ -103,7 +101,6 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void disabledPeriodic() {
-		if(TeleOperated.driver.getAButton()) DriveTrain.calibrateHyro();
 		TeleOperated.manip.setRightRumble(0);
 		TeleOperated.manip.setLeftRumble(0);
 		TeleOperated.driver.setRightRumble(0);

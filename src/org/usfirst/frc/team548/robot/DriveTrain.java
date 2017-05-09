@@ -81,10 +81,6 @@ public class DriveTrain implements PIDOutput {
 		hyro.reset();
 	}
 
-	public static void calibrateHyro() {
-		//hyro.calibrate();
-	}
-	
 	public static void moveDistance(double distance, double power, double threshold){
 		if(Math.abs(DriveTrain.averageDistance()) < distance) { 
 			DriveTrain.drive(power, power);
@@ -111,7 +107,6 @@ public class DriveTrain implements PIDOutput {
 		} else {
 			// I Zone
 			pid.setPID(pid.getP(), 0, 0);
-
 		}
 		drive(output, -output);
 	}
@@ -163,23 +158,23 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static void driveStraight(double power) {
-		if (power > 0) {
-			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * .85, power * 1.15);
-			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * 1.15, power * .85);
-			} else {
-				drive(power, power);
-			}
-		} else {
-			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * 1.15, power * .85);
-			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {
-				drive(power * .85, power * 1.15);
-			} else {
-				drive(power, power);
-			}
-		}
-	}
-
-}
+		if (power > 0) { //If the power is greater than zero. What this means is that if the robot is moving forward, it will run the block underneath it. http://letmegooglethat.com/?q=decision+making+structures+java
+			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) { //This is saying that if the angle that the gyroscope senses is greater than 1.2, then there are some changes that need to be made
+				drive(power * .85, power * 1.15); //This makes it stop not going straight and makes it go straight
+			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {//This is what happens when the angle is on the other side of threshold; being -1.2, also known as left
+				drive(power * 1.15, power * .85);//See, this is the same method being called as the one above, except the opposite sides are being reducded and added
+			} else {//This is an else statement, please refer to this link once again: http://letmegooglethat.com/?q=decision+making+structures+java
+				drive(power, power);//This is what happens if there is now nothing to change
+			}//This is a bracket...
+		} else { //This is the start of another decision making structure, please refer to the link above 
+			if (getAngle() > Constants.DT_DRIVE_STRAIGHT) {////This is saying that if the angle that the gyroscope senses is greater than 1.2, then there are some changes that need to be made
+				drive(power * 1.15, power * .85);//This makes it stop not going straight and makes it go straight
+			} else if (getAngle() < -Constants.DT_DRIVE_STRAIGHT) {//This is what happens when the angle is on the other side of threshold; being -1.2, also known as left
+				drive(power * .85, power * 1.15);////This is what happens when the angle is on the other side of threshold; being -1.2, also known as left
+			} else {//This is an else statement 
+				drive(power, power);//This is what happens if there is nothing to change because the robot is now moving in the correct direction
+			}//bracket
+		}//bracket
+	}//bracket
+	//space
+}//bracket
