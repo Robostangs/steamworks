@@ -24,7 +24,7 @@ public class Climber {
 	public static void setPower(double power) {
 		climbTalon1.set(power);
 		climbTalon2.set(-power);
-	}
+	}///
 	
 	public static void setClimbOpen(boolean b) {
 		sol.set(b);

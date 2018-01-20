@@ -10,7 +10,7 @@ public class OnlyShoot extends AutoMode {
 
 	@Override
 	protected void run() {
-		shootAtSpeed(12, Constants.SHOOT_AUTON_SPEED);
+		turnToAngleInTime(1.5,  77, false);
 	}
 
 }

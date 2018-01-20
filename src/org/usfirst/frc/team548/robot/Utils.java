@@ -9,3 +9,4 @@ public class Utils {
 		return (v != 0) ? Math.pow(v, 2)*(Math.abs(v)/v) : 0; 
 	}
 }
+

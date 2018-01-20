@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class GearIngestor {
 
 	private static GearIngestor instance;
-	private static CANTalon arm, roller;
+	private static CANTalon arm, roller, arm2;
 	private static boolean currentLimiting = false, startedTimer = false;
 	private static Timer currentTimer;
 	
@@ -20,14 +20,20 @@ public class GearIngestor {
 	}
 	
 	private GearIngestor() {
-		arm = new CANTalon(Constants.GEARING_TALONID_ARM);
+		
+		arm = new CANTalon(Constants.GEARING_TALONID_ARM); //encoder
+		//arm2 = new CANTalon(12);
+		
 		arm.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		arm.changeControlMode(TalonControlMode.Position);
+		
 		//arm.reverseOutput(true);
 		arm.setPID(1, 0.0001, 0);
 	
 		arm.enableLimitSwitch(false, false);
 		roller = new CANTalon(Constants.GEARING_TALONID_ROLLER);
+	//	arm2.changeControlMode(TalonControlMode.Follower);
+	//	arm2.set(arm.getDeviceID());
 		currentTimer = new Timer();
 	}
 	
@@ -49,7 +55,8 @@ public class GearIngestor {
 			roller.set(-.7);
 		} else {
 			roller.set(-.25);
-			if(Robot.PDP.getCurrent(4) < 1) currentLimiting = false;
+			if(Robot.PDP.getCurrent(4) < 1) 
+				currentLimiting = false;
 		}
 	}
 	
@@ -63,9 +70,7 @@ public class GearIngestor {
 	}
 	
 	public static void stopArm() {
-		setArmPower(0);
-	}
-	
+		setArmPower(0);}
 	
 	public static void setArmPos(double pos) {
 		if(isEncConnected()) {

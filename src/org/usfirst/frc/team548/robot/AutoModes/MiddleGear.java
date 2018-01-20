@@ -12,7 +12,7 @@ public class MiddleGear extends AutoMode {
 
 	@Override
 	protected void run() {		
-		driveDistanceWithArm(2, .6, 5.925, 2, Constants.GEARING_PEGHEIGHT);
+		driveDistanceWithArm(2, .67, 5.925, 2, Constants.GEARING_PEGHEIGHT);
 		GearIngestorExgeset(.7);
 		driveDistanceWithArm(.63, -.2, .5, 0, Constants.GEARING_MIN);
 		driveDistanceWithArm(.6, -.5, 2, .1, Constants.GEARING_MIN);

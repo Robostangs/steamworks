@@ -19,7 +19,7 @@ public class ArmGearExgest extends AutoCommandBase {
 	protected void run() {
 		// TODO Auto-generated method stub
 		GearIngestor.setArmPos(Constants.GEARING_MIN);
-		GearIngestor.setRollerBarPower(.7);
+		GearIngestor.setRollerBarPower(-.7);
 	}
 
 	@Override

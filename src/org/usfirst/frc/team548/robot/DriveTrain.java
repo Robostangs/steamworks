@@ -56,7 +56,7 @@ public class DriveTrain implements PIDOutput {
 	public static void stop() {
 		drive(0, 0);
 	}
-
+	
 	public static void arcadeDrice(double fwd, double tur) {
 		if (Math.abs(tur) < .01)
 			tur = 0;
@@ -64,7 +64,9 @@ public class DriveTrain implements PIDOutput {
 			fwd = 0;
 		drive(Utils.ensureRange(fwd + tur, -1d, 1d), Utils.ensureRange(fwd - tur, -1d, 1d));
 	}
-
+	
+	
+	
 	public static void shiftHigh(boolean b) {
 		shifter.set(b == Constants.DT_SHIFT_HIGH);
 	}

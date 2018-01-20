@@ -17,7 +17,7 @@ public class ShootAndMiddleGear extends AutoMode {
 			shootAtSpeed(8.5, Constants.SHOOT_MIDDLE_AUTON_SPEED);
 			driveDistanceWithArm(.3, .3, .5, 0, Constants.GEARING_PEGHEIGHT);
 			driveDistanceWithArm(2, -.5, 2.9635, .5, Constants.GEARING_PEGHEIGHT);
-			turnToAngleInTime(1.5, 180, false);
+			turnToAngleInTime(1.5, 77, false);
 			driveDistanceWithArm(1.6, .9, 2.925, 1.7, Constants.GEARING_PEGHEIGHT);
 			GearIngestorExgeset(.7);
 			driveDistanceWithArm(.63, -.2, .5, 0, Constants.GEARING_MIN);
